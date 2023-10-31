@@ -45,3 +45,36 @@ nav {
 .content {
     margin: 20px;
 }
+
+
+
+.product-outer {
+    width: 300px; /* Đặt chiều rộng của sản phẩm */
+    border: 1px solid #ccc; /* Thêm khung viền */
+    margin: 10px; /* Tạo khoảng cách giữa các sản phẩm */
+    padding: 10px; /* Tạo khoảng cách bên trong sản phẩm */
+}
+
+.product-inner {
+    padding: 10px;
+}
+
+.product-body {
+    text-align: center; /* Căn giữa nội dung trong sản phẩm */
+}
+
+.woocommerce-loop-product__title {
+    font-size: 14px; /* Đặt kích thước phông chữ cho tên sản phẩm */
+}
+
+.woocommerce-product-details__short-description {
+    font-size: 12px; /* Đặt kích thước phông chữ cho mô tả sản phẩm */
+}
+
+.price {
+    font-size: 14px; /* Đặt kích thước phông chữ cho giá sản phẩm */
+}
+
+.button {
+    font-size: 12px; /* Đặt kích thước phông chữ cho nút */
+}
