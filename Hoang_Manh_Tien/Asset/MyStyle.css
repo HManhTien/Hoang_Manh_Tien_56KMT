@@ -42,9 +42,6 @@ nav {
 }
 
 
-.content {
-    margin: 20px;
-}
 
 
 
@@ -87,3 +84,18 @@ label {
     display: none !important;
 }
 
+.content-Tieude {
+    display: flex;
+    align-items: center;
+    padding: 40px;
+    font-weight: 800;
+    border-radius: 6px;
+    margin-left: 400px;
+    margin-right:10px;
+}
+
+icon{
+    margin-left: 10px;
+    margin-right: 10px;
+    color : red;
+}

@@ -74,6 +74,7 @@
     <Content Include="Asset\jquery.min.js" />
     <Content Include="Asset\MyCode.js" />
     <Content Include="Asset\MyStyle.css" />
+    <Content Include="Asset\card.css" />
     <Content Include="IMG\avata.png" />
     <Content Include="index.html" />
     <Content Include="Web.config" />

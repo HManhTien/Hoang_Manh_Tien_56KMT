@@ -1,0 +1,61 @@
+﻿.content{
+    padding :50px;
+}
+
+.cards-list {
+    display: flex;
+}
+
+.card{
+    border-radius: 25px;
+    overflow :hidden;
+    background-color:white;
+    box-shadow: rgba(100,100,111,0.2) 0px 7px 29px 0px;
+    width : 25% ;
+    margin-left: 30px;
+
+}
+
+.card-image{
+    height: 300px;
+    width :100% ;
+    object-fit :cover;
+    flex-shrink : 0;
+}
+
+.card-content{
+    padding : 30px;
+}
+
+.card-title{
+    font-weight :600;
+    margin-bottom :25px;
+}
+
+.card-botton{
+    padding :25px;  
+    border-top :1px solid #eee;
+    display :flex;
+    justify-content: space-between;
+    align-items :center;
+}
+
+.card-shop{
+    width : 100px;
+    height : 50px;
+    color : black;
+    display :flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius :6px;
+    background-color : #ff6a00;
+}
+
+.card-shop span{
+    margin-left:10px;
+}
+
+    .card-shop label {
+        margin-left: 5px;
+        margin-right: 5px;
+    }

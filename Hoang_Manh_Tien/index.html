@@ -9,6 +9,9 @@
     <script src="asset/jquery-confirm.min.js"></script>
     <link href="asset/mystyle.css" rel="stylesheet" />
     <script src="asset/mycode.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link href="Asset/card.css" rel="stylesheet" /> 
     <style>
         .xinchao {
             margin-left: 750px;
@@ -18,7 +21,6 @@
 </head>
 <body>
     <header>
-
         <h1>Bánh kem pewpew</h1>
         <h3>Nhanh chóng , tiện lợi , Giá rẻ</h3>
     </header>
@@ -38,8 +40,94 @@
         </ul>
     </nav>
 
-    <div>
+    <div class="content">
+        <!-- Tiêu đề -->
+        <div class="content-Tieude">
+            <h1><b>MUA HÀNG Ở ĐÂY NHÉ !!</b></h1>
+            <ion-icon class="icon-tieude" name="skull-outline"></ion-icon>
+        </div>
         
+
+        <!--Đây là danh sách các bánh cần bán  --->
+        <div class="cards-list">
+            <!--Các thẻ đơn --->
+            <!-- Thẻ 1 : -->
+            <div class="card">
+                <img src="https://plus.unsplash.com/premium_photo-1673296129756-e45408e25250?auto=format&fit=crop&q=80&w=2013&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=" " class="card-image" />
+                <div class="card-content">
+                    <h3 class="card-title">Chưa có gi</h3>
+                    <h4 class="card-title2">loading...</h4>
+                </div>
+                <div class="card-botton">
+                    <div class="card-shop">
+                        <ion-icon name="bag-outline">giỏ hàng </ion-icon>
+                        <label>Giỏ hàng</label>
+                    </div>
+                    <div class="card-thanhtoan">
+                        <button class="btn btn-primary"> Bỏ qua</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thẻ 2 : -->
+            <div class="card">
+                <img src="https://plus.unsplash.com/premium_photo-1673296129756-e45408e25250?auto=format&fit=crop&q=80&w=2013&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=" " class="card-image" />
+                <div class="card-content">
+                    <h3 class="card-title">Chưa có gi</h3>
+                    <h4 class="card-title2">loading...</h4>
+                </div>
+                <div class="card-botton">
+                    <div class="card-shop">
+                        <ion-icon name="bag-outline">giỏ hàng </ion-icon>
+                        <label>Giỏ hàng</label>
+                    </div>
+                    <div class="card-thanhtoan">
+                        <button class="btn btn-primary"> Bỏ qua</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thẻ 3 : -->
+            <div class="card">
+                <img src="https://plus.unsplash.com/premium_photo-1673296129756-e45408e25250?auto=format&fit=crop&q=80&w=2013&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=" " class="card-image" />
+                <div class="card-content">
+                    <h3 class="card-title">Chưa có gi</h3>
+                    <h4 class="card-title2">loading...</h4>
+                </div>
+                <div class="card-botton">
+                    <div class="card-shop">
+                        <ion-icon name="bag-outline">giỏ hàng </ion-icon>
+                        <label>Giỏ hàng</label>
+                    </div>
+                    <div class="card-thanhtoan">
+                        <button class="btn btn-primary"> Bỏ qua</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thẻ 4 : -->
+            <div class="card">
+                <img src="https://plus.unsplash.com/premium_photo-1673296129756-e45408e25250?auto=format&fit=crop&q=80&w=2013&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=" " class="card-image" />
+                <div class="card-content">
+                    <h3 class="card-title">Chưa có gi</h3>
+                    <h4 class="card-title2">loading...</h4>
+                </div>
+                <div class="card-botton">
+                    <div class="card-shop">
+                        <ion-icon name="bag-outline">giỏ hàng </ion-icon>
+                        <label>Giỏ hàng</label>
+                    </div>
+                    <div class="card-thanhtoan">
+                        <button class="btn btn-primary"> Bỏ qua</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
     </div>
 
 </body>
