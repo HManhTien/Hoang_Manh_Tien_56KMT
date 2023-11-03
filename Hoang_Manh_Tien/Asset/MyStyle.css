@@ -78,3 +78,12 @@ nav {
 .button {
     font-size: 12px; /* Đặt kích thước phông chữ cho nút */
 }
+
+label {
+    font-size: 12px;
+}
+
+.not-show {
+    display: none !important;
+}
+
