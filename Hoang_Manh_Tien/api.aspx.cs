@@ -25,8 +25,7 @@ namespace Hoang_Manh_Tien
                     cm.Parameters.Add("@pw", SqlDbType.NVarChar, 50).Value = Request["pw"];
                     break;            
             }
-           
-            int json = (Int32)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
+            string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
         }
 
