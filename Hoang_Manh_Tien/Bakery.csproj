@@ -73,8 +73,7 @@
     <Content Include="Asset\jquery-confirm.min.js" />
     <Content Include="Asset\jquery.min.js" />
     <Content Include="Asset\MyCode.js" />
-    <Content Include="Asset\MyStyle.css" />
-    <Content Include="Asset\Bottom.css" />
+    <Content Include="Asset\Header.css" />
     <Content Include="IMG\5.jpg" />
     <Content Include="index.html" />
     <Content Include="Web.config" />

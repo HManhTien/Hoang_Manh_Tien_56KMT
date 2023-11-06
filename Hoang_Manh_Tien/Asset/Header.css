@@ -1,0 +1,109 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    
+}
+
+/*  CSS CHO THẺ HEADER  */
+/*  ------------------  */
+/*  ------------------  */
+header {
+    background-color: #00ffff;
+    padding: 10px;
+   
+}
+
+    header h1 {
+        flex-grow: 1;
+        text-align: center;
+        color: black;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    header h3 {
+        flex-grow: 1;
+        text-align: center;
+        color: #98a949;
+    }
+
+
+/*  ------------------  */
+/*  ------------------  */
+
+nav {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline;
+    margin-right: 10px;
+}
+
+button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    button:hover {
+        text-decoration: underline;
+    }
+
+/* Đặc biệt cho từng nút */
+.btn-trangchu {
+    background-color: #4caf50; /* Màu xanh lá cây */
+}
+
+.btn-timkiem {
+    background-color: #2196F3; /* Màu xanh dương */
+}
+
+.btn-dondathang {
+    background-color: #f44336; /* Màu đỏ */
+}
+
+.btn-lichsumua {
+    background-color: #FFC107; /* Màu vàng */
+}
+
+.btn-phanhoi {
+    background-color: #9C27B0; /* Màu tím */
+    margin-right: 270px;
+}
+
+/*  ------------------  */
+/*  ------------------  */
+.not-show{
+    display:none !important;
+}
+
+.btn-xinchao {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+    .btn-xinchao.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+.Picture-Tieude1 {
+    width: 50px;
+    height: 50px;
+    margin-left: 100px;
+   
+}
+
