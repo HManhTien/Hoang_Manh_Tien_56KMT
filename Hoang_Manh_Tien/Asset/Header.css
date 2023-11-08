@@ -79,7 +79,7 @@ button {
 
 .btn-phanhoi {
     background-color: #9C27B0; /* Màu tím */
-    margin-right: 270px;
+    margin-right: 250px;
 }
 
 /*  ------------------  */
@@ -88,22 +88,6 @@ button {
     display:none !important;
 }
 
-.btn-xinchao {
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.5s, transform 0.5s;
+.btn-xinchao{
+    color:black;
 }
-
-    .btn-xinchao.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-
-.Picture-Tieude1 {
-    width: 50px;
-    height: 50px;
-    margin-left: 100px;
-   
-}
-

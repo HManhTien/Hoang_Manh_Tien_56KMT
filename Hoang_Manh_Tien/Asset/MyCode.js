@@ -2,109 +2,27 @@
 
     const api = '/api.aspx';
 
-    $('#nut-dang-ky').click(function () {
+    function form_dang_nhap() {
         var content =
-            `
-        <style>
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        label {
-            width: 200px;
-           text-align: center; 
-            padding-right: 10px;
-        }
-        input[type="text"] {
-            flex: 1;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 5px;                  
-        }      
-        </style>
+            `     
+             <style>
+                  input {
+                     border: 1px solid #ccc;
+                     border-radius: 5px;
+                          }       
+             </style>
              <div class="form-group">
-                <label for="create-name">Name :</label>
-                <input type="text" id="create-name" placeholder="Your name" required>
-            </div>
-            <div class="form-group">
-                <label for="create-pw">Mật khẩu :</label>
-                <input type="text" id="create-pw" placeholder="Your password" required>
-            </div>
-             <div class="form-group">
-                <label for="create-email">Email :</label>
-                <input type="text" id="create-email" placeholder="Nhập Emaill" required>
-            </div>
-        
-        `
-        $.confirm({
-            title: 'Đăng Ký!',
-            content: content,
-
-            buttons: {
-                formSubmit: {
-                    text: 'Đăng ký',
-                    btnClass: 'btn-primary',
-                    action: function () {
-                        var data_gui_di = {
-                            action: 'creat-user',
-                            name: $('#create-name').val(),
-                            pw: $('#create-pw').val(),
-                            email: $('#create-email').val()
-                        }
-
-                        console.log(data_gui_di);
-                        $.post(api, data_gui_di, function (data) {
-                            var json = JSON.parse(data);
-                            if (json.ok) {
-
-                            } else {
-
-                            }
-                        })
-                    },
-                    cancel: function () {
-                        //close
-                    },
-                },
-            },
-        });
-    });
-
-    $('#nut-dang-nhap').click(function () {
-        var content =
-            `
-        <style>
-        .form-group {
-            display: flex;
-            align-items: center ;
-            margin-bottom: 10px;
-        }
-        label {
-            width: 200px;
-           text-align: center;          
-        }
-        input[type="text"] {
-            flex: 1;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 5px;                  
-        }      
-        </style>
-             <div class="form-group">
-                <label for="create-name">Name :</label>
+                <label for="create-name">Name :</label><br>
                 <input type="text" id="login-name" placeholder="Your name" required>
             </div>
             <div class="form-group">
-                <label for="create-pw">Mật khẩu :</label>
+                <label for="create-pw">Mật khẩu :</label><br>
                 <input type="text" id="login-pw" placeholder="Your password" required>
-            </div>     
-            
-        `
+            </div>                 
+             `
         var dialog_dangnhap = $.confirm({
             title: 'Đăng Nhập!',
             content: content,
-            icon: 'fa fa-key',
             buttons: {
                 formSubmit: {
                     text: 'Đăng Nhập',
@@ -112,21 +30,21 @@
 
                     action: function () {
                         var data_gui_di = {
-                            action: 'login_user',
-                            name: $('#login-name').val(),
+                            action: 'US_login',
+                            User_Name: $('#login-name').val(),
                             pw: $('#login-pw').val()
                         }
 
                         $.post(api, data_gui_di, function (data) {
-                            console.log(data);
-                            var json = JSON.parse(data);
-                            console.log(json);
-                            if (json == 1) {
+                            var json = JSON.parse(data);                          
+                            if (json.ok) {
                                 dialog_dangnhap.close();
-                                $('#nut-dang-nhap').addClass("not-show");
-                                $('#nut-dang-ky').addClass("not-show");
-                                $('#nut-xin-chao').removeClass("not-show");
-                                $('#nut-dang-xuat').removeClass("not-show");
+                                                                                  
+                                $('#nut-login').addClass("not-show");
+                                $('#nut-dangky').addClass("not-show");
+                                $('#text-xinchao').removeClass("not-show");
+                                $('#nut-logout').removeClass("not-show");
+                                $('.btn-xinchao').html("Xin chao <b>đùa</b>");
                             } else {
                                 alert(json.msg)
                             }
@@ -137,12 +55,144 @@
                 cancel: {},
             },
         });
-    });
+    }
 
-    $('#nut-dang-xuat').click(function () {
-        $('#nut-dang-nhap').removeClass("not-show");
-        $('#nut-dang-ky').removeClass("not-show");
-        $('#nut-xin-chao').addClass("not-show");
-        $('#nut-dang-xuat').addClass("not-show");
+    function form_dang_ky() {
+        var content =
+            `     
+             <style>
+                  input {
+                     border: 1px solid #ccc;
+                     border-radius: 5px;
+                          }       
+             </style>
+             <div class="form-group">
+                <label for="create-name">Name :</label><br>
+                <input type="text" id="login-name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+                <label for="create-pw">Mật khẩu :</label><br>
+                <input type="text" id="login-pw" placeholder="Your password" required>
+            </div> 
+            <div class="form-group">
+                <label for="create-pw">Xác nhận mật khẩu:</label><br>
+                <input type="text" id="login-pw2" placeholder="Your password" required>
+            </div> 
+            <div class="form-group">
+                <label for="create-pw">Email:</label><br>
+                <input type="text" id="login-email" placeholder="Your password" required>
+            </div> 
+             <div class="form-group">
+                <label for="create-pw">Số Điện Thoại:</label><br>
+                <input type="text" id="login-SDT" placeholder="Your password" required>
+            </div> 
+             `
+
+        var dialog_dangnhap = $.confirm({
+            title: 'Đăng ký tài khoản!',
+            content: content,
+            icon: 'fa fa-key',
+            buttons: {
+                formSubmit: {
+                    text: 'Đăng ký',
+                    btnClass: 'btn-primary',
+
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'US_login',
+                            User_Name : $('#login-name').val(),
+                            pw: $('#login-pw').val()
+                        }
+
+                        console.log(data_gui_di);
+                        $.post(api, data_gui_di, function (data) {
+                            var json = JSON.parse(data);
+                            console.log(data);
+                            if (json.ok) {
+                                dialog_dangnhap.close();                           
+                            } else {
+                                alert(json.msg)
+                            }
+                        })
+
+                    }
+                },
+                cancel: {},
+            },
+        });
+    };
+
+    function list_user() {
+        $.confirm({
+            title: "Danh sách tài khoản",
+            content: `<div id="danh_sach_user">Loading....</div>`,
+            columnClass: 'large',
+            onContentReady: function () {
+                //khi trang tải xong
+                $.post(api,
+                    {
+                        action: 'US_LIST'
+                    },
+                    function (data) {
+                        var json = JSON.parse(data);
+                        var noidung = "";
+                        if (json.ok) {
+                            noidung += `<table class="table table-hover"> `;
+                            noidung += 
+                            `
+                            <thead>
+                                <tr>
+                                  <th>STT</th>
+                                  <th>ID</th>
+                                  <th>US_Name</th>
+                                  <th>Họ và Tên</th>
+                                  <th>SDT</th>
+                                  <th>Sửa/Xóa</th>
+                                </tr>
+                            </thead> <tbody>
+
+                            `
+                            var stt = 0;
+                            for (var user of json.data) {
+                                var suaxoa =
+                                    `
+                                        <button class="btn btn-warning">Sửa</button>
+                                        <button class="btn btn-danger">Xoa</button>
+                                    `;
+                                noidung += 
+                            `
+                            <tr>
+                                <td>${++stt}</td>
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${user.hoten}</td>
+                                <td>${user.SDT}</td>
+                                <td>${suaxoa}</td>
+                            </tr>
+                           
+                            `
+                            }
+                            noidung += " </tbody> </table>";
+                        } else
+                        {
+                            noidung = "Không có dữ liệu nhé !!";
+                        }
+                        $('#danh_sach_user').html(noidung);
+
+                });
+            }
+        });
+    };
+    $('#nut-login').click(function () { 
+        form_dang_nhap();
+    }); 
+
+    $('#text-xinchao').click(function () {
+        list_user();
     });
+    $('#nut-dangky').click(function () {
+        form_dang_ky();
+    });
+   
+
 });

@@ -16,14 +16,17 @@ namespace Hoang_Manh_Tien
         {
             //khai báo biến db thuộc lớp SqlServer
             SqlServer db = new SqlServer();
-            SqlCommand cm = db.GetCmd("SP_User", action); //tạo cm với "SP_Company" và @action từ method GetCmd của db
+            SqlCommand cm = db.GetCmd("SP_USER", action); //tạo cm với "SP_Company" và @action từ method GetCmd của db
             switch (action)
             {
                 //2 loại này truyền 5 tham số chung
-                case "login_user":       
-                    cm.Parameters.Add("@name", SqlDbType.NVarChar, 50).Value = Request["name"];
+                case "US_login":   
+                    cm.Parameters.Add("@User_Name", SqlDbType.NVarChar, 50).Value = Request["User_Name"];
                     cm.Parameters.Add("@pw", SqlDbType.NVarChar, 50).Value = Request["pw"];
-                    break;            
+                    break;
+
+                case "US_LIST":
+                    break;
             }
             string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
@@ -33,8 +36,10 @@ namespace Hoang_Manh_Tien
         {
             string action = Request["action"];
             switch (action)
-            {
-                case "login_user":                
+            {   
+                case "US_LIST":
+                case "US_login":
+               
                     xuly_company(action);
                     break;
             }
