@@ -8,24 +8,36 @@
 /*  ------------------  */
 header {
     background-color: #00ffff;
-    padding: 10px;
-   
+    padding: 5px; 
+    display: flex;
+    justify-content: space-between;
 }
 
-    header h1 {
-        flex-grow: 1;
-        text-align: center;
-        color: black;
-        font-size: 36px;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+.logo_web{
+    flex: 1; 
+}
+    .logo_web .anh_logo {
+        width: 120px;
+        height: 120px;
     }
 
-    header h3 {
-        flex-grow: 1;
-        text-align: center;
-        color: #98a949;
-    }
+.Tieude_web{
+    flex:3;
+}
+.Tieude_web h1 {
+    
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+    .Tieude_web h3 {
+   
+    text-align: center;
+    color: #98a949;
+}
 
 
 /*  ------------------  */
@@ -34,7 +46,7 @@ header {
 nav {
     background-color: #4caf50;
     color: white;
-    padding: 10px;
+    padding: 3px;
 }
 
 ul {

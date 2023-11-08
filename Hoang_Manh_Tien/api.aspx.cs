@@ -27,6 +27,10 @@ namespace Hoang_Manh_Tien
 
                 case "US_LIST":
                     break;
+
+                case "US_Xoa":
+                    cm.Parameters.Add("@id", SqlDbType.NVarChar, 50).Value = Request["id"];
+                    break;
             }
             string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
@@ -39,7 +43,7 @@ namespace Hoang_Manh_Tien
             {   
                 case "US_LIST":
                 case "US_login":
-               
+                case "US_Xoa":
                     xuly_company(action);
                     break;
             }
