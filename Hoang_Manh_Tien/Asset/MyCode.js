@@ -115,7 +115,7 @@
             }
         })
     };
- function checkdangnhap() {
+    function checkdangnhap() {
         if (!logined) {
             $.confirm({
                 animateFromElement: false,
@@ -134,7 +134,7 @@
                         btnClass: 'btn-blue',
                         keys: ['enter', 'n'],
                         action: function () {
-                            form_dang_nhap(); 
+                            form_dang_nhap();
                         }
                     },
                     cancel: {
@@ -148,13 +148,6 @@
         }
         return false;
     };
-
-
-
-
-
-    
-   
     function form_dang_nhap() {
         var content =
             `     
@@ -209,6 +202,12 @@
             },
         });
     }
+
+
+
+
+
+
 
     function form_dang_ky() {
         var content =
@@ -276,7 +275,7 @@
     };
 
 
- 
+
 
 
 
@@ -298,10 +297,36 @@
     });
 
     $('#nut-timkiem').click(function () {
-        if (checkdangnhap()) return;
-        
-        
-    });
+      //  if (checkdangnhap()) return;
+        $('.tim_kiem_data').removeClass("not-show");
+        $.post(api,
+            {
+                action: 'US_LIST'
+            },
+            function (data) {
+                var json = JSON.parse(data);
+                var noidung = "";
+                if (json.ok) {
+                    var stt = 0;
+                    for (var user of json.data)
+                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-hang" data-cid="${user.id}" ">Mua Ngay</button>`;
+                        noidung +=
+                          
+                      `    
+                <tr>
+                <td>${++stt}</td>
+                <td>${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.hoten}</td>
+                <td>${user.SDT}</td>  
+                 <td>${muahang}</td>
+                </tr> 
+           
+                      `                               
+                }
+                $('.data_table').html(noidung);
+            });
+        });
 
 
 });
