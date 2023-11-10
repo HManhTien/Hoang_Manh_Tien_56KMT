@@ -107,17 +107,7 @@ button {
 
 /*  ---------Phần Giữa ---------  */
 
-.table-size {
-    width: 70%;
-    align-items:center;
-    text-align:center;
-    margin-left:100px;
+.timkiem-title{
+    margin :auto;
+    width : 70%;
 }
-
-.tim_kiem_data{
-    margin-top: 50px;  
-}
-    .tim_kiem_data timkiem-title {
-        display: flex;
-        justify-content: space-between;
-    }

@@ -2,6 +2,7 @@
 
     var logined = false;
     const api = '/api.aspx';
+
     //Xử lý xong rồi
     function list_user() {
         $.confirm({
@@ -115,6 +116,72 @@
             }
         })
     };
+    function edit_user(id, json) {
+        var user;
+        for (var item of json.data) {
+            if (item.id == id) {
+                user = item;
+                break;
+            }
+        }
+
+        var content =
+            `     
+             <style>
+                  input {
+                     border: 1px solid #ccc;
+                     border-radius: 5px;
+                          }       
+             </style>
+             <div class="form-group">
+                <label for="create-name">UserName :</label><br>
+                <input type="text" id="tao-name" value="${user.username}"  required>
+            </div>
+            <div class="form-group">
+                <label for="create-name">Họ và Tên :</label><br>
+                <input type="text" id="tao-ten" value="${user.hoten}" required>
+            </div>                            
+             <div class="form-group">
+                <label for="create-pw">Số Điện Thoại:</label><br>
+                <input type="text" id="tao-SDT" value="${user.SDT}" required>
+            </div> 
+             `
+        var dialog_edit = $.confirm({
+            title: 'Đăng ký tài khoản!',
+            content: content,
+            icon: 'fa fa-key',
+            buttons: {
+                formSubmit: {
+                    text: 'Đăng ký',
+                    btnClass: 'btn-primary',
+
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'US_edit',
+                            id : id ,
+                            User_Name: $('#tao-name').val(),
+                            hoten: $('#tao-ten').val(),              
+                            SDT: $('#tao-SDT').val()
+                        }
+                   
+                        $.post(api, data_gui_di, function (data) {
+                            var json = JSON.parse(data);
+                            if (json.ok) {
+                                dialog_edit.close();
+                                capnhat_list_user();
+                            } else {
+                                alert(json.msg)
+                            }
+                        })
+
+                    }
+                },
+                cancel: {},
+            },
+        });
+
+
+    };
     function checkdangnhap() {
         if (!logined) {
             $.confirm({
@@ -201,14 +268,91 @@
                 cancel: {},
             },
         });
-    }
+    };
+    function form_muahang(mabanh, data) {
+        var banh;
+        var json = JSON.parse(data);
+        for (var item of json.data) {
+            if (item.MaBanh == mabanh) {
+                banh = item;
+                break;
+            }
+        }
+
+        alert([data]);
+        var content =
+            `     
+             <style>
+                  input {
+                     border: 1px solid #ccc;
+                     border-radius: 5px;
+                          }       
+             </style>
+             <div class="form-group">
+                <label for="create-name">Ma hoa don</label><br>
+                <input type="text" id="mahoadon" value="${Math.random()}"  required>
+            </div>
+
+             <div class="form-group">
+                <label for="create-name">Tên Khách hàng </label><br>
+                <input type="text" id="Tenkhachang" placeholder="Nhập tên khách hàng " required>
+            </div>  
+
+            <div class="form-group">
+                <label for="create-name">Địa chỉ giao hàng </label><br>
+                <input type="text" id="diachikhachhang" placeholder=" Địa chỉ khách hàng " required>
+            </div> 
+
+             <div class="form-group">
+                <label for="create-name"> SDT </label><br>
+                <input type="text" id="SDT" placeholder=" Nhập số điện thoại" required>
+            </div> 
+            <div class="form-group">
+                <label for="create-name">Tên bánh</label><br>
+                <input type="text" id="Tenbanh" value="${banh.TEN}" required>
+            </div>                            
+             <div class="form-group">
+                <label for="create-pw">Số lượng: </label><br>
+                <input type="text" id="soluong" placeholder="Nhập số lượng" required>
+            </div> 
+             `
 
 
+        var dialog_edit = $.confirm({
+            title: 'Mua Hàng !',
+            content: content  ,         
+            buttons: {
+                formSubmit: {
+                    text: 'Đặt hàng',
+                    btnClass: 'btn-primary',
 
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'Muahang',
+                            mabanh: mabanh,
+                            mahoadon: $('#tao-name').val(),
+                             
+                           
+                        }
 
+                        console.log(data_gui_di);
+                        $.post(api, data_gui_di, function (data) {
+                            var json = JSON.parse(data);
+                            if (json.ok) {
+                                dialog_edit.close();
+                                capnhat_list_user();
+                            } else {
+                                alert(json.msg)
+                            }
+                        })
 
+                    }
+                },
+                cancel: {},
+            },
+        });
 
-
+    };
     function form_dang_ky() {
         var content =
             `     
@@ -219,28 +363,24 @@
                           }       
              </style>
              <div class="form-group">
-                <label for="create-name">Name :</label><br>
-                <input type="text" id="login-name" placeholder="Your name" required>
+                <label for="create-name">UserName :</label><br>
+                <input type="text" id="tao-name" placeholder="Your  user name" required>
+            </div>
+            <div class="form-group">
+                <label for="create-name">Họ và Tên :</label><br>
+                <input type="text" id="tao-ten" placeholder="Your name" required>
             </div>
             <div class="form-group">
                 <label for="create-pw">Mật khẩu :</label><br>
-                <input type="text" id="login-pw" placeholder="Your password" required>
-            </div> 
-            <div class="form-group">
-                <label for="create-pw">Xác nhận mật khẩu:</label><br>
-                <input type="text" id="login-pw2" placeholder="Your password" required>
-            </div> 
-            <div class="form-group">
-                <label for="create-pw">Email:</label><br>
-                <input type="text" id="login-email" placeholder="Your password" required>
-            </div> 
+                <input type="text" id="tao-pw" placeholder="Your password" required>
+            </div>                   
              <div class="form-group">
                 <label for="create-pw">Số Điện Thoại:</label><br>
-                <input type="text" id="login-SDT" placeholder="Your password" required>
+                <input type="text" id="tao-SDT" placeholder="nhập số điện thoại" required>
             </div> 
              `
 
-        var dialog_dangnhap = $.confirm({
+        var dialog_dangky = $.confirm({
             title: 'Đăng ký tài khoản!',
             content: content,
             icon: 'fa fa-key',
@@ -251,17 +391,18 @@
 
                     action: function () {
                         var data_gui_di = {
-                            action: 'US_login',
-                            User_Name: $('#login-name').val(),
-                            pw: $('#login-pw').val()
+                            action: 'US_add',
+                            User_Name: $('#tao-name').val(),
+                            hoten: $('#tao-ten').val(),
+                            pw: $('#tao-pw').val(),
+                            SDT: $('#tao-SDT').val()
                         }
 
                         console.log(data_gui_di);
                         $.post(api, data_gui_di, function (data) {
-                            var json = JSON.parse(data);
-                            console.log(data);
+                            var json = JSON.parse(data);                  
                             if (json.ok) {
-                                dialog_dangnhap.close();
+                                dialog_dangky.close();
                             } else {
                                 alert(json.msg)
                             }
@@ -295,38 +436,63 @@
         $('#nut-login').removeClass("not-show");
         $('#nut-dangky').removeClass("not-show");
     });
-
     $('#nut-timkiem').click(function () {
-      //  if (checkdangnhap()) return;
+        if (checkdangnhap()) return;
         $('.tim_kiem_data').removeClass("not-show");
+
         $.post(api,
             {
-                action: 'US_LIST'
+                action: 'CH_list_banh'
             },
             function (data) {
                 var json = JSON.parse(data);
+                
                 var noidung = "";
                 if (json.ok) {
-                    var stt = 0;
-                    for (var user of json.data)
-                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-hang" data-cid="${user.id}" ">Mua Ngay</button>`;
-                        noidung +=
-                          
-                      `    
+                    noidung += `<table class="table table-hover" style="max-width:70% ;margin:auto;border: 3px solid #73AD21; " > `;
+                    noidung +=
+                        `
+            <thead>
                 <tr>
+                  <th>STT</th>
+                  <th>Mã Bánh </th>
+                  <th>Tên Bánh</th>
+                  <th>Kích cỡ</th>
+                  <th>Giá Bán</th>
+                  <th>Mua Hàng</th>
+                </tr>
+            </thead> <tbody>
+
+            `
+                    var stt = 0;
+                    for (var banh of json.data) {
+                       
+                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-ngay" data-cid="${banh.MaBanh}"">Mua ngay</button>`; 
+                        noidung +=
+                            `
+            <tr>
                 <td>${++stt}</td>
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.hoten}</td>
-                <td>${user.SDT}</td>  
-                 <td>${muahang}</td>
-                </tr> 
+                <td>${banh.MaBanh}</td>
+                <td>${banh.TEN}</td>
+                <td>${banh.SIZE}</td>
+                <td>${banh.GIA}</td>
+                <td>${muahang}</td>
+            </tr>
            
-                      `                               
+            `
+                    }
+                    noidung += " </tbody> </table>";
+                } else {
+                    noidung = "Không có dữ liệu nhé !!";
                 }
-                $('.data_table').html(noidung);
+                $('.table-search').html(noidung);
+
+
+                $('.nut-mua-ngay').click(function () {
+                    var mabanh = $(this).data('cid');
+                    form_muahang(mabanh ,data);
+                });
+
             });
         });
-
-
 });
