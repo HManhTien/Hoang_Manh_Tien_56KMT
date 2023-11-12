@@ -44,6 +44,7 @@ header {
 /*  ------------------  */
 
 nav {
+    display :flex;
     background-color: #4caf50;
     color: white;
     padding: 3px;
@@ -71,14 +72,11 @@ button {
     button:hover {
         text-decoration: underline;
     }
+     
 
 /* Đặc biệt cho từng nút */
 .btn-trangchu {
     background-color: #4caf50; /* Màu xanh lá cây */
-}
-
-.btn-timkiem {
-    background-color: #2196F3; /* Màu xanh dương */
 }
 
 .btn-dondathang {
@@ -91,7 +89,7 @@ button {
 
 .btn-phanhoi {
     background-color: #9C27B0; /* Màu tím */
-    margin-right: 250px;
+    margin-right: 320px;
 }
 
 /*  ------------------  */
@@ -107,7 +105,36 @@ button {
 
 /*  ---------Phần Giữa ---------  */
 
-.timkiem-title{
-    margin :auto;
-    width : 70%;
+.data-trang-chu {
+    display: flex;
+    flex-direction: row;
 }
+
+.table-trang-chu {
+    flex: 70%;
+    border-right: 2px solid #a59090;
+    
+}
+
+.trang-chu-title {
+    flex: 30%;
+    display: flex;
+}
+    .trang-chu-title input {
+        width: 250px; /* Kích thước mong muốn của phần tử */
+        height: 50px;
+    }
+    .trang-chu-title button {
+        height: 50px;
+        width: 100px;
+    }
+
+.ssssss {
+    transform: rotate(-90deg);
+    transform-origin: center center;
+    white-space: nowrap;
+    padding: 5px;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+

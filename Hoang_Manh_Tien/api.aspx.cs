@@ -59,6 +59,9 @@ namespace Hoang_Manh_Tien
             {
                 case "CH_list_banh":
                     break;
+
+                case "CH_list_hoa_don":
+                    break;
             }
             string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
@@ -77,6 +80,7 @@ namespace Hoang_Manh_Tien
                     xuly_nguoidung(action);
                     break;
                 case "CH_list_banh":
+                case "CH_list_hoa_don":
                     xuly_cuahang(action);
                     break;
             }
