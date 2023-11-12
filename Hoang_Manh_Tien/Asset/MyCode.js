@@ -3,7 +3,20 @@
     var logined = false;
     var admin_login = false;
     const api = '/api.aspx';
-    var json_edit;
+    var data_luu_giu;
+    var MA_KHACH_HANG;
+
+   
+    function getdate() {
+        var currentDate = new Date();
+        var day = currentDate.getDate();
+        var month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
+        var year = currentDate.getFullYear();
+
+        return ('' + day + '/' + month + '/' + year);
+    }
+
+    Neu_khachhang_dang_nhap();
     trang_chu_lv();
     function checkdangnhap() {
         if (!logined) {
@@ -44,6 +57,28 @@
         $('.data-lich-su-don-hang').addClass("not-show");
         $('.data-phan-hoi').addClass("not-show");
     }
+    function Neu_khachhang_dang_nhap() {
+        $('.btn-nguyenlieu').addClass("not-show");
+        $('.btn-dondathang-admin').addClass("not-show");
+        $('.btn-doanhthu').addClass("not-show");
+        $('.btn-phanhoi-admin').addClass("not-show");
+
+        $('.btn-trangchu').removeClass("not-show");
+        $('.btn-dondathang').removeClass("not-show");
+        $('.btn-lichsumua').removeClass("not-show");
+        $('.btn-phanhoi').removeClass("not-show");
+    }
+    function Neu_admin_dang_nhap() {
+        $('.btn-trangchu').addClass("not-show");
+        $('.btn-dondathang').addClass("not-show");
+        $('.btn-lichsumua').addClass("not-show");
+        $('.btn-phanhoi').addClass("not-show");
+
+        $('.btn-nguyenlieu').removeClass("not-show");
+        $('.btn-dondathang-admin').removeClass("not-show");
+        $('.btn-doanhthu').removeClass("not-show");
+        $('.btn-phanhoi-admin').removeClass("not-show");
+    }
 
     $('#nut-logout').click(function () {
         $('#text-xinchao').addClass("not-show");
@@ -70,28 +105,22 @@
                      border-radius: 5px;
                           }       
              </style>
-             <div class="form-group">
-                <label for="create-name">UserName :</label><br>
-                <input type="text" id="tao-name" placeholder="Your  user name" required>
-            </div>
-            <div class="form-group">
-                <label for="create-name">Họ và Tên :</label><br>
-                <input type="text" id="tao-ten" placeholder="Your name" required>
-            </div>
-            <div class="form-group">
-                <label for="create-pw">Mật khẩu :</label><br>
-                <input type="text" id="tao-pw" placeholder="Your password" required>
-            </div>                   
-             <div class="form-group">
-                <label for="create-pw">Số Điện Thoại:</label><br>
-                <input type="text" id="tao-SDT" placeholder="nhập số điện thoại" required>
-            </div> 
+             
+    <pre>
+    USER NAME  : <input type="text" id="tao-name" placeholder="nhập user name" required>    
+    HỌ ĐỆM     : <input type="text" id="tao-hodem" placeholder="nhập họ đệm" required>
+    TÊN        : <input type="text" id="tao-ten" placeholder="nhập tên " required>
+    PW         : <input type="text" id="tao-pw" placeholder=" nhập mật khẩu " required>
+    XÁC NHẬN PW: <input type="text" id="tao-pw2" placeholder=" xác nhận mật khẩu " required>
+    ĐỊA CHỈ    : <input type="text" id="tao-diachi" placeholder=" nhập địa chỉ " required>
+    SDT        : <input type="text" id="tao-sdt" placeholder=" nhập số điện thoại " required>
+    </pre>
              `
 
         var dialog_dangky = $.confirm({
             title: 'Đăng ký tài khoản!',
             content: content,
-            icon: 'fa fa-key',
+            columnClass: 'medium',
             buttons: {
                 formSubmit: {
                     text: 'Đăng ký',
@@ -101,9 +130,12 @@
                         var data_gui_di = {
                             action: 'US_add',
                             User_Name: $('#tao-name').val(),
-                            hoten: $('#tao-ten').val(),
+                            hodem: $('#tao-hodem').val(),
+                            ten: $('#tao-ten').val(),
                             pw: $('#tao-pw').val(),
-                            SDT: $('#tao-SDT').val()
+                            pw2: $('#tao-pw').val(),
+                            diachi: $('#tao-diachi').val(),
+                            SDT: $('#tao-sdt').val()
                         }
 
                         console.log(data_gui_di);
@@ -160,18 +192,22 @@
                             User_Name: $('#login-name').val(),
                             pw: $('#login-pw').val()
                         }
-
+                        data_luu_giu= {
+                            action: 'US_login',
+                            User_Name: $('#login-name').val(),
+                            pw: $('#login-pw').val()
+                        }
+                        
+                        
                         $.post(api, data_gui_di, function (data) {
-                            var json = JSON.parse(data);
-                            json_edit = data;
-                           
-                            if (json.ok) {
+                            var json = JSON.parse(data);                        
+                            if (json.ok ==  1) {
                                 if (json.NAME === 'ADMIN') {
-                                    alert('vao day ko?')
                                     admin_login = true;
-                                } else
-                                    dialog_dangnhap.close();
+                                } 
+                                dialog_dangnhap.close();
                                 logined = true;
+
                                 $('#nut-login').addClass("not-show");
                                 $('#nut-dangky').addClass("not-show");
                                 $('#text-xinchao').removeClass("not-show");
@@ -180,10 +216,20 @@
                                 if (admin_login === true) {
 
                                     $('.btn-xinchao').html("Xin chao <b>ADMIN</b>");
+                                    Neu_admin_dang_nhap();
                                 } else {
-                                    $('.btn-xinchao').html("Xin chào");
+                                    $.post(api, data_luu_giu, function (data) {
+                                        var json = JSON.parse(data);
+                                        for (var user of json.data) {
+                                            MA_KHACH_HANG = user.ID;
+                                            var noi_dung = `Xin Chào<b> ${user.TEN} </b>`
+                                        }
+                                        $('.btn-xinchao').html(noi_dung);
+                                    })
+
+                                    Neu_khachhang_dang_nhap();
                                 }
-                                
+
                             } else {
                                 alert(json.msg)
                             }
@@ -195,34 +241,47 @@
         });
     };
 
-    // Bấm nút xin chào 
-    $('#text-xinchao').click(function() {
+
+    $('#text-xinchao').click(function () {
         if (admin_login === true) {
             // Nếu là admin thì hiện danh sách tài khoản mật khẩu;
             list_user();
         } else {
-            alert([json_edit]);
-            var me = JSON.parse(json_edit).html();
-           
-            
-            //Người bình thường chỉ hiện thông tin cá nhân
-            var content =
-                `
-                    Thông Tin cá nhân:
-                   <table> <tbody><tr><td>${me.TEN}</td></tr></tbody> </table>
-                 `
-
-                    $.confirm({
-                        title: "",
-                        columnClass: 'large',
-                        content: content,
-                        buttons: {
-
-                            cancel: {},
-                        },
-                    })
+            $.confirm({
+                title: "Thông tin cá nhân",
+                content: `<div id="danh_sach_user">Loading....</div>`,
+                columnClass: 'small',
+                onContentReady: function () {
+                    //khi trang tải xong
+                    thong_tin_ca_nhan();
+                }
+            });
         }
- });
+    });
+    function thong_tin_ca_nhan() {
+        $.post(api, data_luu_giu ,function (data) {
+                var json = JSON.parse(data);
+                var noidung = "";
+                if (json.ok) {
+           
+                    for (var user of json.data) { 
+                    noidung +=
+               ` 
+                    <pre>
+         USER NAME : ${user.USERNAME}
+         TÊN       : ${user.HODEM + user.TEN}
+         ĐỊA CHỈ   : ${user.DIACHI}
+         SDT       : ${user.SDT}
+                    </pre>
+                `
+                    }
+                } else {
+                    noidung = "Không có dữ liệu nhé !!";
+                }
+                $('#danh_sach_user').html(noidung);
+            });
+    }
+
 
     //admin đăng nhập 
     function list_user() {
@@ -253,8 +312,9 @@
                   <th>STT</th>
                   <th>ID</th>
                   <th>US_Name</th>
-                  <th>Họ và Tên</th>
-                  <th>SDT</th>
+                  <th>Tên</th>
+                  <th>Địa chỉ</th>
+                   <th>SDT</th>              
                   <th>Sửa/Xóa</th>
                 </tr>
             </thead> <tbody>
@@ -262,16 +322,17 @@
             `
                     var stt = 0;
                     for (var user of json.data) {
-                        var suaxoa = `<button class="btn btn-sm btn-warning nut-sua-xoa" data-cid="${user.id}" data-action="US_edit">Sửa</button>`;
-                        suaxoa += ` <button class="btn btn-sm btn-danger nut-sua-xoa" data-cid="${user.id}" data-action="US_Xoa">Xóa</button>`;
+                        var suaxoa = `<button class="btn btn-sm btn-warning nut-sua-xoa" data-cid="${user.ID}" data-action="US_edit">Sửa</button>`;
+                        suaxoa += ` <button class="btn btn-sm btn-danger nut-sua-xoa" data-cid="${user.ID}" data-action="US_Xoa">Xóa <ion-icon name="trash-outline"></ion-icon></button>`;
                         noidung +=
                             `
             <tr>
                 <td>${++stt}</td>
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.hoten}</td>
-                <td>${user.SDT}</td>
+                <td>${user.ID}</td>
+                <td>${user.USERNAME}</td>
+                <td>${user.TEN}</td>
+                <td>${user.DIACHI}</td>
+                <td>${user.SDT}</td>  
                 <td>${suaxoa}</td>
             </tr>
            
@@ -287,6 +348,7 @@
                 $('.nut-sua-xoa').click(function () {
                     var action = $(this).data('action');
                     var id = $(this).data('cid');
+                    console.log(action, id);
                     if (action == 'US_Xoa') {
                         //cần xác nhận xóa 
                         del_user(id, json);
@@ -303,15 +365,15 @@
     function del_user(id, json) {
         var user;
         for (var item of json.data) {
-            if (item.id == id) {
+            if (item.ID == id) {
                 user = item;
                 break;
             }
         }
 
         var dialog_xoauser = $.confirm({
-            title: `Xác nhận xóa  ${user.hoten}`,
-            content: `Xác nhận xóa nhé????`,
+            title: ` xóa  ${user.TEN} nhé `,
+            content: ``,
             buttons: {
                 YES: {
                     action: function () {
@@ -340,7 +402,7 @@
     function edit_user(id, json) {
         var user;
         for (var item of json.data) {
-            if (item.id == id) {
+            if (item.ID == id) {
                 user = item;
                 break;
             }
@@ -354,23 +416,23 @@
                      border-radius: 5px;
                           }       
              </style>
-             <div class="form-group">
-                <label for="create-name">UserName :</label><br>
-                <input type="text" id="tao-name" value="${user.username}"  required>
-            </div>
-            <div class="form-group">
-                <label for="create-name">Họ và Tên :</label><br>
-                <input type="text" id="tao-ten" value="${user.hoten}" required>
-            </div>                            
-             <div class="form-group">
-                <label for="create-pw">Số Điện Thoại:</label><br>
-                <input type="text" id="tao-SDT" value="${user.SDT}" required>
-            </div> 
+            <pre>
+            USER NAME : <input type="text" id="tao-name" value="${user.USERNAME}" required> <br />
+
+            HỌ ĐỆM    :  <input type="text" id="tao-hodem" value="${user.HODEM}" required>   <br />
+
+            TÊN       :  <input type="text" id="tao-ten" value="${user.TEN}" required>     <br />
+
+            ĐỊA CHỈ   :  <input type="text" id="tao-diachi" value="${user.DIACHI}" required>   <br />
+
+            SDT       :  <input type="text" id="tao-SDT" value="${user.SDT}" required>     <br />
+            </pre>
              `
         var dialog_edit = $.confirm({
-            title: 'Đăng ký tài khoản!',
+            title: `SỬA ĐỔI THÔNG TIN - ${user.TEN}!`,
             content: content,
             icon: 'fa fa-key',
+            columnClass: 'medium',
             buttons: {
                 formSubmit: {
                     text: 'Đăng ký',
@@ -381,10 +443,13 @@
                             action: 'US_edit',
                             id: id,
                             User_Name: $('#tao-name').val(),
-                            hoten: $('#tao-ten').val(),
+                            hodem: $('#tao-hodem').val(),
+                            ten: $('#tao-ten').val(),
+                            diachi: $('#tao-diachi').val(),
                             SDT: $('#tao-SDT').val()
                         }
 
+                        console.log(data_gui_di);
                         $.post(api, data_gui_di, function (data) {
                             var json = JSON.parse(data);
                             if (json.ok) {
@@ -408,11 +473,12 @@
     //khách hàng đăng nhập vào
     $('.btn-trangchu').click(function () {
         add_class_not_show();
-        $('.btn-trangchu').removeClass("not-show");
+
+        $('.data-trang-chu').removeClass("not-show");
 
         trang_chu_lv();
     });
-    function form_muahang(mabanh, data) {
+    function form_muahang(mabanh, data ,data1) {
         var banh;
         var json = JSON.parse(data);
         for (var item of json.data) {
@@ -421,34 +487,24 @@
                 break;
             }
         }
-
-        alert([data]);
+        var mahoadon = Math.random();
+        var user;
+        var json = JSON.parse(data1);
+        for (var user of json.data) { }
         var content =
             `     
-             <pre>
-                Chào Quý Khách hàng
+              <pre>
+                    Chào mưng quý khách
+        Mã Hóa đơn : ${mahoadon}
+        Ngày mua   : ${ getdate()}
 
-        Chúng tôi xin chân thành cảm ơn sự tin tưởng và lựa chọn của 
-        Quý khách hàng tại Bánh kem PEW PEW.
-
-        Chúng tôi xác nhận rằng đơn hàng của bạn đã được nhận và đang được 
-        xử lý .Dưới đây là một số thông tin chi tiết về đơn hàng của bạn:
-
-                 Thông Tin Đơn Hàng:
-
-                     Mã Đơn Hàng: #DH20231111
-                     Ngày Đặt Hàng: 11/11/2023
-
-                     1. Tên Sản Phẩm : Bánh 
-                        Số lượng: 2
-                        Giá: [Giá sản phẩm 1]
-                        Người Nhận:
-                        Địa Chỉ Giao Hàng:
-
-        Chân thành cảm ơn,
-        Bánh kem PEW PEW
-        Đội Ngũ Hỗ Trợ Khách Hàng
-        </pre>
+    Tên sản phẩm  : ${banh.TEN}                               <img style="width: 200px; " src="${banh.ANH}" />
+    Số lượng      : <input type="int" id="soluong" placeholder="Số lượng " required>
+    Giá Tiền      : <input type="int" id="giatien" value="${banh.GIA}" required>
+    Tên người nhận: <input type="text" id="tennguoinhan" value="${user.HODEM  + " "+user.TEN}" required>
+    Địa chỉ       : <input type="text" id="diachinhan" value="${user.DIACHI}" required>
+    
+    </pre>
              `
 
 
@@ -462,26 +518,36 @@
                     text: 'Đặt hàng',
                     btnClass: 'btn-primary',
 
-
+                    
                     action: function () {
-                        var data_gui_di = {
-                            action: 'Muahang',
-                            mabanh: mabanh,
-                            mahoadon: $('#tao-name').val(),
-
-
+                        var data_bang_hoa_don = {
+                            action: 'CH_add_hoa_don',
+                            mahoadon: mahoadon,
+                            Tennguoinhan: $('#tennguoinhan').val(),
+                            diachinguoinhan: $('#diachinhan').val(),
+                            MaKH: MA_KHACH_HANG,
+                            Trangthai: 'Chờ Xác Nhận',
+                            tongtien: $('#soluong').val() * $('#giatien').val(),
+                            
                         }
 
-                        console.log(data_gui_di);
-                        $.post(api, data_gui_di, function (data) {
-                            var json = JSON.parse(data);
-                            if (json.ok) {
-                                dialog_edit.close();
-                                capnhat_list_user();
-                            } else {
-                                alert(json.msg)
-                            }
+                        var data_bang_chi_tiet = {
+                            action: 'CH_add_ct_hoa_don',
+                            mahoadon: mahoadon,
+                            mabanh: mabanh,
+                            soluong: $('#soluong').val(),
+                            giaban: $('#giatien').val(),
+                            
+                        }
+
+                        $.post(api, data_bang_chi_tiet, function (data) {
+
                         })
+
+                        $.post(api, data_bang_hoa_don, function (data) {
+
+                        })
+                        
 
                     }
                 },
@@ -513,7 +579,7 @@
                     var stt = 0;
                     for (var banh of json.data) {
 
-                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-ngay" data-cid="${banh.MaBanh}"">Mua ngay</button>`;
+                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-ngay" data-cid="${banh.MaBanh}""><ion-icon name="cart-outline"></ion-icon> Mua Ngay</button>`;
                         noidung +=
                             `
             <tr>
@@ -534,15 +600,20 @@
 
 
                 $('.nut-mua-ngay').click(function () {
+                    checkdangnhap();
                     var mabanh = $(this).data('cid');
-                    form_muahang(mabanh, data);
+                    $.post(api, data_luu_giu, function (data1) {
+
+                        form_muahang(mabanh, data, data1);
+                    });
                 });
 
             });
     }
 
+    
 
-
+   
     $('.btn-dondathang').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
@@ -555,7 +626,8 @@
                 var json = JSON.parse(data);
                 var noidung = "";
                 if (json.ok) {
-                    noidung += `<table class="table table-hover " style="width: 70%; margin:auto"> `;
+                    noidung += `<table class="table table-hover " 
+                                style="width: 70%; margin:auto"> `;
                     noidung +=
                         `
             <thead>
@@ -574,7 +646,8 @@
                     var stt = 0;
                     for (var hoadon of json.data) {
 
-                        var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
+                        var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
+                                        data-cid="${hoadon.MaHD}">Xem chi tiết</button>`;
                         noidung +=
                             `
             <tr>
@@ -598,7 +671,14 @@
 
                 $('.nut-thay-doi').click(function () {
                     var mahoadon = $(this).data('cid');
-                    chitiethoadon(mahoadon, json);
+
+                    var data_gui_di = {
+                        action: 'CH_chi_tiet_hoa_don',
+                        mahoadon: mahoadon
+                    }
+                    $.post(api, data_gui_di, function (data) {
+                        edit_chi_tiet_don_hang(mahoadon, data);
+                    })
                 });
 
             });
@@ -606,42 +686,174 @@
 
 
     });
-    function chitiethoadon(mahoadon, json) {
-        var content =
-            `<pre>
-        Chào Quý Khách hàng
+    function edit_chi_tiet_don_hang(mahoadon, data) {
+        var Hoadon;
+        var json = JSON.parse(data)
+        for (var item of json.data) {
+            if (item.MaHD == mahoadon) {
+                Hoadon = item;
+                break;
+            }
+        }
 
-          Chúng tôi xin chân thành cảm ơn sự tin tưởng và lựa chọn của 
-          Quý khách hàng tại Bánh kem PEW PEW.
+        if (json.ok) {
+            var content = `<pre>
+             Thông Tin Đơn Hàng:
+             Mã Đơn Hàng: ${Hoadon.MaHD}
+             Ngày Đặt Hàng: ${Hoadon.NGAY}
+            </pre>`
 
-          Chúng tôi xác nhận rằng đơn hàng của bạn đã được nhận và đang được 
-          xử lý .Dưới đây là một số thông tin chi tiết về đơn hàng của bạn:
-
-         Thông Tin Đơn Hàng:
-
-             Mã Đơn Hàng: #DH20231111
-             Ngày Đặt Hàng: 11/11/2023
-
-             1. Tên Sản Phẩm : Bánh 
-                Số lượng: 2
-                Giá: [Giá sản phẩm 1]
-                Người Nhận:
-                Địa Chỉ Giao Hàng:
+            var stt = 0;
+            for (var item of json.data) {
+                content += `<pre>
+          ${++stt}.Mặt hàng số ${stt} 
+                    - Tên Bánh : ${item.TENBANH}
+                    - Số lượng : ${item.SOLUONG}
+                    - Giá      : ${item.GIABANH} </pre>`;
+            }
+            content += `<pre>
+                 - Tên người nhận  : ${item.TEN}
+                 - Địa chỉ nhận : ${item.DIACHI}
+             Tổng Tiền :     : ${item.TONGTIEN}
 
           Chân thành cảm ơn,
-          Bánh kem PEW PEW
-          Đội Ngũ Hỗ Trợ Khách Hàng
-        </pre>`
+          Minh Tuấn Bakery
+          Đội Ngũ Hỗ Trợ Khách Hàng</pre>`;
 
-        var dialog_dangnhap = $.confirm({
-            title :"",
-            columnClass: 'large',
-            content: content,
-            buttons: {
-                cancel: {},
+
+            $.confirm({
+                title: "",
+                columnClass: 'large',
+                content: content,
+                buttons: {
+                    cancel: {},
+                },
+            });
+        };
+    } 
+
+        // Nút lịch sử mua hàng được bấm
+        ////////////////////////////////
+    $('.btn-lichsumua').click(function () {
+        alert('ko dc bấm');
+        if (checkdangnhap()) return;
+        add_class_not_show();
+        $('.data-lich-su-don-hang').removeClass("not-show");
+
+        $.post(api,
+            {
+                action: 'CH_list_hoa_don_hoan_thanh'
             },
-        });
- 
-}
-      
+            function (data) {
+                var json = JSON.parse(data);
+                var noidung = "";
+                if (json.ok) {
+                    noidung += `<table class="table table-hover " 
+                                style="width: 70%; margin:auto"> `;
+                    noidung +=
+                        `
+            <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã Hóa Đơn</th>
+                  <th>Mã Khách Hàng</th>
+                  <th>Tổng Tiền</th>          
+                  <th>Ngày mua</th>
+                  <th>Thay đổi</th>
+                </tr>
+            </thead> <tbody>
+
+            `
+                    var stt = 0;
+                    for (var hoadon of json.data) {
+
+                        var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
+                                        data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
+                        noidung +=
+                            `
+            <tr>
+                <td>${++stt}</td>
+                <td>${hoadon.MaHD}</td>
+                <td>${hoadon.MaKH}</td>
+                <td>${hoadon.Tien}</td>  
+                 <td>${hoadon.NGAY}</td>
+                <td>${thaydoi}</td>
+            </tr>
+           
+            `
+                    }
+                    noidung += " </tbody> </table>";
+                } else {
+                    noidung = "Không có dữ liệu nhé !!";
+                }
+                $('.data-lich-su-don-hang').html(noidung);
+
+
+                $('.nut-thay-doi').click(function () {
+                    var mahoadon = $(this).data('cid');
+                    var data_gui_di = {
+                        action: 'CH_chi_tiet_hoa_don',
+                        mahoadon: mahoadon
+                    }
+                    $.post(api, data_gui_di, function (data) {
+                        chitiethoadon(mahoadon, data);
+                    })
+
+                });
+
+            });
+    });
+    function chitiethoadon(mahoadon, data) {
+        var Hoadon;
+        var json = JSON.parse(data)
+        for (var item of json.data) {
+            if (item.MaHD == mahoadon) {
+                Hoadon = item;
+                break;
+            }
+        }
+        if (json.ok) {
+            var content = `<pre>
+                    Chào Quý Khách hàng
+
+          Chúng tôi xin chân thành cảm ơn sự tin tưởng và lựa chọn của 
+          Quý khách hàng tại Minh Tuấn Bakery.
+
+          Chúng tôi xác nhận rằng đơn hàng của bạn đã được nhận và đang 
+          được xử lý .Dưới đây là một số thông tin chi tiết về đơn hàng 
+          của bạn:
+
+         Thông Tin Đơn Hàng:
+             Mã Đơn Hàng: ${Hoadon.MaHD}
+             Ngày Đặt Hàng: ${Hoadon.NGAY}
+            </pre>`
+
+            var stt = 0;
+            for (var item of json.data) {
+                content += `<pre>
+          ${++stt}.Mặt hàng số ${stt} 
+                    - Tên Bánh : ${item.TENBANH}
+                    - Số lượng : ${item.SOLUONG}
+                    - Giá      : ${item.GIABANH} </pre>`;
+            }
+            content += `<pre>
+                 - Tên người nhận  : ${item.TEN}
+                 - Địa chỉ nhận : ${item.DIACHI}
+             Tổng Tiền :     : ${item.TONGTIEN}
+
+          Chân thành cảm ơn,
+          Minh Tuấn Bakery
+          Đội Ngũ Hỗ Trợ Khách Hàng</pre>`;
+
+            $.confirm({
+                title: "",
+                columnClass: 'large',
+                content: content,
+                buttons: {
+                    cancel: {},
+                },
+            });
+        }
+
+    }
 });

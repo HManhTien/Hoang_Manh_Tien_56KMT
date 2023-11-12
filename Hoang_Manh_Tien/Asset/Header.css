@@ -14,15 +14,17 @@ header {
 }
 
 .logo_web{
-    flex: 1; 
+    flex: 3; 
 }
     .logo_web .anh_logo {
         width: 120px;
         height: 120px;
+        display: block; /* Đặt kiểu hiển thị thành block để có thể sử dụng margin: auto */
+        margin: auto;
     }
 
 .Tieude_web{
-    flex:3;
+    flex:6;
 }
 .Tieude_web h1 {
     
@@ -39,6 +41,47 @@ header {
     color: #98a949;
 }
 
+
+/*  ------------------  */
+/*  ------------------  */
+
+
+.ad-container {
+    width: 100%; /* Kéo dài toàn bộ chiều rộng của trang */
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.ad {
+    width: 200%; /* Kéo dài chiều rộng quảng cáo gấp đôi */
+    height: 100%;
+    background-color: white;
+    color: #fff;
+    text-align: center;
+    line-height: 120px;
+    position: absolute;
+    left: 0; /* Bắt đầu từ bên trái */
+    animation: slide 50s linear infinite; /* Tăng thời gian để đi qua toàn bộ trang */
+    z-index: 1;
+}
+
+@keyframes slide {
+    0% {
+        left: 0;
+    }
+
+    100% {
+        left: -100%; /* Đi qua toàn bộ chiều rộng */
+    }
+}
+
+.ad img {
+    width: 120px;
+    height: auto;
+    z-index: 1;
+}
 
 /*  ------------------  */
 /*  ------------------  */
@@ -89,7 +132,6 @@ button {
 
 .btn-phanhoi {
     background-color: #9C27B0; /* Màu tím */
-    margin-right: 320px;
 }
 
 /*  ------------------  */
@@ -97,6 +139,7 @@ button {
 .not-show{
     display:none !important;
 }
+
 
 .btn-xinchao{
     color:black;
@@ -127,14 +170,11 @@ button {
     .trang-chu-title button {
         height: 50px;
         width: 100px;
+        padding: 0 0;
     }
 
-.ssssss {
-    transform: rotate(-90deg);
-    transform-origin: center center;
-    white-space: nowrap;
-    padding: 5px;
-    background-color: #f0f0f0;
-    text-align: center;
+
+.btn-login-ok {
+    margin-left: 600px;
 }
 

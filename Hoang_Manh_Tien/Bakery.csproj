@@ -74,6 +74,13 @@
     <Content Include="Asset\jquery.min.js" />
     <Content Include="Asset\MyCode.js" />
     <Content Include="Asset\Header.css" />
+    <Content Include="IMG\Anh1.jpg" />
+    <Content Include="IMG\Anh2.jpg" />
+    <Content Include="IMG\Anh3.jpg" />
+    <Content Include="IMG\Anh4.jpg" />
+    <Content Include="IMG\Anh5.jpg" />
+    <Content Include="IMG\Anh6.jpg" />
+    <Content Include="IMG\anhbia.png" />
     <Content Include="IMG\Logo.png" />
     <Content Include="index.html" />
     <Content Include="tablesorter-master\dist\css\dragtable.mod.min.css" />
