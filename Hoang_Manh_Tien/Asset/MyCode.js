@@ -611,7 +611,15 @@
             });
     }
 
-    
+    $('.btn-doanhthu').click(function () {
+        alert('ko dc bấm');
+        if (checkdangnhap()) return;
+        add_class_not_show();
+        
+        $('.data-lich-su-don-hang').removeClass("not-show");
+        xem_doanh_thu();
+        list_hoa_don_hoan_thanh();
+    });
 
    
     $('.btn-dondathang').click(function () {
@@ -739,7 +747,10 @@
         if (checkdangnhap()) return;
         add_class_not_show();
         $('.data-lich-su-don-hang').removeClass("not-show");
-
+       
+        list_hoa_don_hoan_thanh();
+    });
+    function list_hoa_don_hoan_thanh() {
         $.post(api,
             {
                 action: 'CH_list_hoa_don_hoan_thanh'
@@ -749,38 +760,38 @@
                 var noidung = "";
                 if (json.ok) {
                     noidung += `<table class="table table-hover " 
-                                style="width: 70%; margin:auto"> `;
+                         style="width: 70%; margin:auto"> `;
                     noidung +=
                         `
-            <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Mã Hóa Đơn</th>
-                  <th>Mã Khách Hàng</th>
-                  <th>Tổng Tiền</th>          
-                  <th>Ngày mua</th>
-                  <th>Thay đổi</th>
-                </tr>
-            </thead> <tbody>
+     <thead>
+         <tr>
+           <th>STT</th>
+           <th>Mã Hóa Đơn</th>
+           <th>Mã Khách Hàng</th>
+           <th>Tổng Tiền</th>          
+           <th>Ngày mua</th>
+           <th>Thay đổi</th>
+         </tr>
+     </thead> <tbody>
 
-            `
+     `
                     var stt = 0;
                     for (var hoadon of json.data) {
 
                         var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
-                                        data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
+                                 data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
                         noidung +=
                             `
-            <tr>
-                <td>${++stt}</td>
-                <td>${hoadon.MaHD}</td>
-                <td>${hoadon.MaKH}</td>
-                <td>${hoadon.Tien}</td>  
-                 <td>${hoadon.NGAY}</td>
-                <td>${thaydoi}</td>
-            </tr>
-           
-            `
+     <tr>
+         <td>${++stt}</td>
+         <td>${hoadon.MaHD}</td>
+         <td>${hoadon.MaKH}</td>
+         <td>${hoadon.Tien}</td>  
+          <td>${hoadon.NGAY}</td>
+         <td>${thaydoi}</td>
+     </tr>
+    
+     `
                     }
                     noidung += " </tbody> </table>";
                 } else {
@@ -802,7 +813,7 @@
                 });
 
             });
-    });
+    }
     function chitiethoadon(mahoadon, data) {
         var Hoadon;
         var json = JSON.parse(data)
