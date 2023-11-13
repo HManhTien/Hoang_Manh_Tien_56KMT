@@ -50,12 +50,13 @@
             return true;
         }
         return false;
-    };
+    }; 
     function add_class_not_show() {
         $('.data-trang-chu').addClass("not-show");
         $('.data-hoa-don-dat-hang').addClass("not-show");
         $('.data-lich-su-don-hang').addClass("not-show");
         $('.data-phan-hoi').addClass("not-show");
+        $('.dulieuoday').addClass("not-show");
     }
     function Neu_khachhang_dang_nhap() {
         $('.btn-nguyenlieu').addClass("not-show");
@@ -78,6 +79,7 @@
         $('.btn-dondathang-admin').removeClass("not-show");
         $('.btn-doanhthu').removeClass("not-show");
         $('.btn-phanhoi-admin').removeClass("not-show");
+        add_class_not_show();
     }
 
     $('#nut-logout').click(function () {
@@ -154,6 +156,7 @@
             },
         });
     };
+
 
     ///////////////////
     // bấm nút đăng nhập
@@ -281,6 +284,7 @@
                 $('#danh_sach_user').html(noidung);
             });
     }
+
 
 
     //admin đăng nhập 
@@ -470,6 +474,8 @@
     };
 
 
+
+
     //khách hàng đăng nhập vào
     $('.btn-trangchu').click(function () {
         add_class_not_show();
@@ -611,17 +617,65 @@
             });
     }
 
+
+
     $('.btn-doanhthu').click(function () {
         alert('ko dc bấm');
         if (checkdangnhap()) return;
         add_class_not_show();
-        
-        $('.data-lich-su-don-hang').removeClass("not-show");
+
+        $('.dulieuoday').removeClass("not-show");
+        $('.data-hoa-don-dat-hang').removeClass("not-show");
         xem_doanh_thu();
         list_hoa_don_hoan_thanh();
+       
     });
+    function xem_doanh_thu() {
+        $.post(api,
+            {  
+                action: 'CH_doanh_thu'
+            },
+            function (data) {
+                var json = JSON.parse(data);
+                if (json.ok) {
+                    for (var doanhthu of json.data) {
+                        var loinhuan = doanhthu.TONGTIEN * 30/100
+                        var noidung =
+                        `<pre>
+                        _________________________________________________________________________________
+                        |                        Thông Báo doanh thu của quán                           |
+                            -_-                                                               -_-       |
+                        |                    1. Khách hàng mua nhiều hàng nhất                          |
+                                                Anh(chị): ${doanhthu.TENKHACHHANG}                           
+                                                 Số lần mua : ${doanhthu.SLMH}                          
+                        |                                                                               |
+                        |                    2. Loại bánh bán được nhiều nhất                           |
+                                                 Tên Bánh     : ${doanhthu.TENBANH}                     
+                        |                        Số lượng bán : ${doanhthu.SOLUONG}                     
+                        |                                                                               |
+                        |                    3. Tổng số tiền bán được (Sẽ làm chi tiết sau)             |
+                                                   Doanh thu: ${doanhthu.TONGTIEN} $                                  
+                        |                          Lợi nhuận: ${loinhuan} $                            
+                        |                    4. Tổng số hóa đơn bán ra                                  |
+                        |                        Số lượng: ${doanhthu.SLHD}                             
+                                                                                                        |
+                        |        OK Đã Thông kê xong bán không được là do maketting thôi                |
+                                 không phải do web đâu nhé                                              
+                        |                                                                               |
+                        |_______________________________________________________________________________|
+                        </pre>`
+                    }
+                    $('.dulieuoday').html(noidung);
+                } else {
+                    alert([json.msg]);
+                }
+            }
+        )
+    };
 
-   
+
+
+
     $('.btn-dondathang').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
@@ -740,13 +794,15 @@
         };
     } 
 
+
+
         // Nút lịch sử mua hàng được bấm
         ////////////////////////////////
     $('.btn-lichsumua').click(function () {
         alert('ko dc bấm');
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.data-lich-su-don-hang').removeClass("not-show");
+        $('.data-hoa-don-dat-hang').removeClass("not-show");
        
         list_hoa_don_hoan_thanh();
     });
@@ -797,7 +853,7 @@
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
-                $('.data-lich-su-don-hang').html(noidung);
+                $('.data-hoa-don-dat-hang').html(noidung);
 
 
                 $('.nut-thay-doi').click(function () {

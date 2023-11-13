@@ -87,6 +87,8 @@ namespace Hoang_Manh_Tien
                     cm.Parameters.Add("@soluong", SqlDbType.Int).Value = Request["soluong"];
                     cm.Parameters.Add("@giaban", SqlDbType.Int).Value = Request["giaban"];
                     break;
+                case "CH_doanh_thu":
+                    break;
             }
             string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
@@ -110,6 +112,7 @@ namespace Hoang_Manh_Tien
                 case "CH_chi_tiet_hoa_don":
                 case "CH_add_hoa_don":
                 case "CH_add_ct_hoa_don":
+                case "CH_doanh_thu":
                     xuly_cuahang(action);
                     break;
             }

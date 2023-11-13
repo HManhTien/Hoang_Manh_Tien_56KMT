@@ -1,0 +1,45 @@
+﻿.footer {
+    background-color: #ac9696;
+   
+}
+
+.footer-top {
+    margin-bottom: 30px;
+}
+
+.footer-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.footer-col {
+    padding: 0 15px;
+}
+
+.footer-contact p {
+    margin: 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.logo-footer img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.footer-bottom {
+    padding: 10px 0;
+    background-color: #333;
+    color: #fff;
+}
+
+    .footer-bottom a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }

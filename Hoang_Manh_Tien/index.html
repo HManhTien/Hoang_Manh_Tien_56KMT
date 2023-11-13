@@ -13,7 +13,7 @@
     <script src="asset/mycode.js"></script>
     <link href="Asset/Header.css" rel="stylesheet" />
     <link rel="shortcut icon" href="#" />
-
+    <link href="Asset/footer.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -62,44 +62,111 @@
         </ul>
     </nav>
 
-    <!----Trang chủ ---->
-    <!------------------>
-    <div class="data-trang-chu">
-        <div class="table-trang-chu">
-            <div class="data-table-trang-chu">
+
+    <div class="Phan-body">
+
+        <!----Trang chủ ---->
+        <!------------------>
+        <div class="data-trang-chu">
+            <div class="table-trang-chu">
+                <div class="data-table-trang-chu">
+                </div>
+            </div>
+            <div class="trang-chu-title">
+                <input class="input-group-text input-seach" placeholder="Từ tìm kiếm ..." />
+                <button class="btn btn-primary nut-search"><ion-icon name="search-outline"></ion-icon>Tìm Kiếm</button>
             </div>
         </div>
-        <div class="trang-chu-title">
-            <input class="input-group-text input-seach" placeholder="Nhập vào đây " />
-            <button class="btn btn-primary nut-search"><ion-icon name="search-outline"></ion-icon>Tìm Kiếm</button>
+
+
+
+        <div class="dulieuoday">
+            <!------Viết gì đấy -->
         </div>
+
+        <!----Hóa đơn   ---->
+        <!------------------>
+        <div class="data-hoa-don-dat-hang">
+        </div>
+
     </div>
 
-    <!----Hóa đơn   ---->
-    <!------------------>
-    <div class="data-hoa-don-dat-hang ">
-    </div>
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <h3 class="footer-title">Để lại lời nhắn</h3>
+                        <div id="col-left contactFormWrapper">
 
 
-
-    <!----Lịch sử   ---->
-    <!------------------>
-    <div class="data-lich-su-don-hang">
-        <!------Viết gì đấy -->
-    </div>
-
-    <div class="data-phan-hoi">
-        <!------Viết gì đấy -->
-    </div>
+                            <form accept-charset="UTF-8" action="/contact" class="contact-form" method="post">
+                                <input name="form_type" type="hidden" value="contact">
+                                <input name="utf8" type="hidden" value="✓">
 
 
-    <input list="browsers">
-    <datalist id="browsers">
-        <option value="Internet Explorer">
-        <option value="Firefox">
-        <option value="Chrome">
-        <option value="Opera">
-        <option value="Safari"> 
-    </datalist>
+                                <div class="contact-form">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <input required="" type="text" name="contact[name]" class="form-control" placeholder="Tên của bạn" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <input required="" type="text" name="contact[email]" class="form-control" placeholder="Email của bạn" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <input pattern="[0-9]{10,12}" required="" type="text" name="contact[phone]" class="form-control" placeholder="Số điện thoại của bạn" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <textarea required="" name="contact[body]" placeholder="Nội dung"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-30">
+                                            <button class="btn btn-dark">Gửi</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input id="c44041f503774125ae261c03c2437fc0" name="g-recaptcha-response" type="hidden" value="03AFcWeA5JtJmGSP5WxT8NftSjmqH8XCvK5Vc4qqnRW8onoMpJcdqyYoPmZhIPmQyddTEtPl-NTYztE7r9OdKCIdfyAqXolTiAVGUuKeNjzMQO1a1oP4fPOKiibLR3vM2HJSCm7FscEOzB9sNHTJ8ajfo-gc99WRY7aDHk-_gu8buq1e_i7uXWgbyNguOkFTlY1xMTneUeIaSHInCgfkSWEbBbYMhlc4eHY4cTf7MVmgAJOtyRfE0kSNY-Ho-4eHxZW5uMB4qUMZ8aZPVouxQlcnxGj76TEgI_0EO3Oz1xJPdSQJOyql-tCk2Wd7RObDSz-wNeFNNu-Vu4sGDmonJ2IouX-TQDi42UaEzvNzeIMkdBWGrPrBrTdhyWtOPlAqr-0zxryCisAfnZHbLDubKXpb7kT0BMIY9YrMgNnmB7tdY0kQDUq2RGFIhAkfTCGZSW8GAiyw48jpIHjJcLRjg_u0Xgfw5SAUtTuE68rQMCxnpSeoHk2h4SpwRcJDwdAf-Fgu74cv-Tphn9r6qwuzLn8yscgK1rZi2raraZ0ilgCCiHQVQNoWVmA215EPEBT3FkL1JR4lSMzItDj3D2_pD1grJUuxhErDLiRxrGw-O3bRFpQLM7mTronuc"><noscript src="https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-"></noscript><noscript>grecaptcha.ready(function() {grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', {action: 'submit'}).then(function(token) {document.getElementById('c44041f503774125ae261c03c2437fc0').value = token;});});</noscript>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="footer-col">
+                            <h3 class="footer-title">
+                                Minh Tuấn Bakery
+                            </h3>
+                            <div class="footer-contact">
+                                <p><i class="fa-map-marker-alt fa"></i><span>Phường Tích lương , Thành phố Thái Nguyên , tỉnh Thái Nguyên</span></p>
+                                <p><i class="fa-phone fa"></i><span>024 3856 3856. </span></p><p> Mail: cskh@gmail.com.vn</p>
+
+                            </div>
+
+                            <div class="logo-footer">
+                                <a href="http://online.gov.vn/Home/WebDetails/100760" target="_blank" rel="nofollow noreferrer">
+                                    <img src="https://file.hstatic.net/1000300454/file/logo_bct_019590229b4c4dfda690236b67f7aff4.png" alt="Bộ Công Thương">
+                                </a>
+                            </div>
+
+
+                            <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <div class="container">
+                <p>Copyright © 2023 <a href="https://www.facebook.com/HoangTienz2302/"> Facebook</a>  <a target="_blank" href="https://www.haravan.com?ref=govic"></a></p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -74,6 +74,7 @@
     <Content Include="Asset\jquery.min.js" />
     <Content Include="Asset\MyCode.js" />
     <Content Include="Asset\Header.css" />
+    <Content Include="Asset\footer.css" />
     <Content Include="IMG\Anh1.jpg" />
     <Content Include="IMG\Anh2.jpg" />
     <Content Include="IMG\Anh3.jpg" />
