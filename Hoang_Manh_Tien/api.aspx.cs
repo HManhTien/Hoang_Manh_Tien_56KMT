@@ -89,6 +89,15 @@ namespace Hoang_Manh_Tien
                     break;
                 case "CH_doanh_thu":
                     break;
+                case "CH_xac_nhan_hoa_don":
+                    break;
+                case "CH_update_xac_nhan_don_hang":
+                    cm.Parameters.Add("@mahoadon", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    break;
+                case "CH_tim_kiem_banh":
+                    cm.Parameters.Add("@tenbanh", SqlDbType.NVarChar, 50).Value = Request["tenbanh"];
+                    break;
+
             }
             string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
@@ -113,6 +122,9 @@ namespace Hoang_Manh_Tien
                 case "CH_add_hoa_don":
                 case "CH_add_ct_hoa_don":
                 case "CH_doanh_thu":
+                case "CH_xac_nhan_hoa_don":
+                case "CH_update_xac_nhan_don_hang":
+                case "CH_tim_kiem_banh":
                     xuly_cuahang(action);
                     break;
             }

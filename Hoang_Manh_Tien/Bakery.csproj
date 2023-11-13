@@ -82,6 +82,8 @@
     <Content Include="IMG\Anh5.jpg" />
     <Content Include="IMG\Anh6.jpg" />
     <Content Include="IMG\anhbia.png" />
+    <Content Include="IMG\Banh_database1.jpg" />
+    <Content Include="IMG\Banh_database2.jpg" />
     <Content Include="IMG\Logo.png" />
     <Content Include="index.html" />
     <Content Include="tablesorter-master\dist\css\dragtable.mod.min.css" />
