@@ -6,9 +6,59 @@
     var data_luu_giu;
     var MA_KHACH_HANG;
     var action_bandau = {
-        action : 'CH_list_banh'
+        action: 'CH_list_banh'
     }
+    var noi_dung_nut_xin_chao;
 
+    login_ck();
+    function login_ck() {
+        var id = get_store('name_login');
+        var ck = get_store('ck_login');
+        var data_gui_di = {
+            action: 'US_login_ck',
+            id: id,
+            ck: ck
+        }
+        if (id != null && ck != null) {
+            $.post(api, data_gui_di, function (data) {
+                login(data);
+            });
+        } else {
+            return;
+        }   
+    };
+    function login(data) {
+        var json = JSON.parse(data);
+        if (json.ok == 1) {
+
+           
+            for (var user of json.data) {
+                MA_KHACH_HANG = user.ID;
+                noi_dung_nut_xin_chao = `Xin Chào<b> ${user.TEN} </b>`
+                setCookie('name_login', user.ID, 365);
+                setCookie('ck_login', user.COOKIE, 365);
+
+                if (user.NAME === 'ADMIN') {
+                    admin_login = true;
+                    $('.btn-xinchao').html("Xin chao <b>ADMIN</b>");
+                    Neu_admin_dang_nhap();
+                } else {
+                    $('.btn-xinchao').html(noi_dung_nut_xin_chao);
+                    Neu_khachhang_dang_nhap();
+                }
+            }
+            
+            logined = true;
+            $('#nut-login').addClass("not-show");
+            $('#nut-dangky').addClass("not-show");
+            $('#text-xinchao').removeClass("not-show");
+            $('#nut-logout').removeClass("not-show");
+
+
+        } else {
+            alert(json.msg)
+        }
+    }
     function getdate() {
         var currentDate = new Date();
         var day = currentDate.getDate();
@@ -94,6 +144,7 @@
         logined = false;
         $('.data-trang-chu').removeClass("not-show");
         trang_chu_lv();
+        setCookie('ck_login', null, 365);
     });
     //Xử lý xong rồi
 
@@ -207,39 +258,8 @@
 
 
                         $.post(api, data_gui_di, function (data) {
-                            var json = JSON.parse(data);
-                            if (json.ok == 1) {
-                                if (json.NAME === 'ADMIN') {
-                                    admin_login = true;
-                                }
-                                dialog_dangnhap.close();
-                                logined = true;
-
-                                $('#nut-login').addClass("not-show");
-                                $('#nut-dangky').addClass("not-show");
-                                $('#text-xinchao').removeClass("not-show");
-                                $('#nut-logout').removeClass("not-show");
-
-                                if (admin_login === true) {
-
-                                    $('.btn-xinchao').html("Xin chao <b>ADMIN</b>");
-                                    Neu_admin_dang_nhap();
-                                } else {
-                                    $.post(api, data_luu_giu, function (data) {
-                                        var json = JSON.parse(data);
-                                        for (var user of json.data) {
-                                            MA_KHACH_HANG = user.ID;
-                                            var noi_dung = `Xin Chào<b> ${user.TEN} </b>`
-                                        }
-                                        $('.btn-xinchao').html(noi_dung);
-                                    })
-
-                                    Neu_khachhang_dang_nhap();
-                                }
-
-                            } else {
-                                alert(json.msg)
-                            }
+                            login(data);
+                            dialog_dangnhap.close();
                         })
                     }
                 },
@@ -485,7 +505,7 @@
         add_class_not_show();
 
         $('.data-trang-chu').removeClass("not-show");
- 
+
         trang_chu_lv(action_bandau);
     });
     function form_muahang(mabanh, data, data1) {
@@ -566,8 +586,8 @@
 
     };
     function trang_chu_lv(data_gui_di) {
-       
-        $.post(api, data_gui_di ,
+
+        $.post(api, data_gui_di,
             function (data) {
                 var json = JSON.parse(data);
 
@@ -731,8 +751,7 @@
 
     // Nút lịch sử mua hàng được bấm
     ////////////////////////////////
-    $('.btn-lichsumua').click(function () {
-        alert('ko dc bấm');
+    $('.btn-lichsumua').click(function () {  
         if (checkdangnhap()) return;
         add_class_not_show();
         $('.data-hoa-don-dat-hang').removeClass("not-show");
@@ -993,7 +1012,7 @@
         add_class_not_show();
         $('.data-trang-chu').removeClass("not-show");
 
-        
+
     });
 
     $('.nut-search').click(function () {
@@ -1005,5 +1024,46 @@
         trang_chu_lv(data_gui_di)
     });
 
-    
+
+
+    ////// PHẦN NÀY COOKIE NHÉ //////////////
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+    function eraseCookie(name) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+    function getLocal(name) {
+        return window.localStorage.getItem(name);
+    }
+    function setLocal(name, value) {
+        window.localStorage.setItem(name, value);
+    }
+    function delLocal(name) {
+        localStorage.removeItem(name);
+    }
+    function get_store(key) {
+        var value = getCookie(key);
+        if (value == null || value == '' || value == undefined) {
+            value = getLocal(key);
+        }
+        return value;
+    }
+
 });

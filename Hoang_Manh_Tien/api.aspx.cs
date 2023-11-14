@@ -20,6 +20,10 @@ namespace Hoang_Manh_Tien
             SqlCommand cm = db.GetCmd("SP_USER", action); //tạo cm với "SP_Company" và @action từ method GetCmd của db
             switch (action)
             {
+                case "US_login_ck":
+                    cm.Parameters.Add("@id", SqlDbType.NVarChar, 50).Value = Request["id"];
+                    cm.Parameters.Add("@cookie", SqlDbType.NVarChar, 50).Value = Request["ck"];
+                    break;
                 //2 loại này truyền 5 tham số chung
                 case "US_login":   
                     cm.Parameters.Add("@User_Name", SqlDbType.NVarChar, 50).Value = Request["User_Name"];
@@ -113,6 +117,7 @@ namespace Hoang_Manh_Tien
                 case "US_Xoa":
                 case "US_add":
                 case "US_edit":
+                case "US_login_ck":
                     xuly_nguoidung(action);
                     break;
                 case "CH_list_banh":
