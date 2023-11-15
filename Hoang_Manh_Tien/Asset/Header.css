@@ -117,22 +117,7 @@ button {
     }
      
 
-/* Đặc biệt cho từng nút */
-.btn-trangchu {
-    background-color: #4caf50; /* Màu xanh lá cây */
-}
 
-.btn-dondathang {
-    background-color: #f44336; /* Màu đỏ */
-}
-
-.btn-lichsumua {
-    background-color: #FFC107; /* Màu vàng */
-}
-
-.btn-phanhoi {
-    background-color: #9C27B0; /* Màu tím */
-}
 
 /*  ------------------  */
 /*  ------------------  */
@@ -188,7 +173,7 @@ button {
 
 
 .btn-login-ok {
-    margin-left: 600px;
+    margin-left: 750px;
 }
 
 

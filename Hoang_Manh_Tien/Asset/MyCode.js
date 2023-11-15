@@ -8,8 +8,8 @@
     var action_bandau = {
         action: 'CH_list_banh'
     }
-    var noi_dung_nut_xin_chao;
 
+    var noi_dung_nut_xin_chao;
     login_ck();
     function login_ck() {
         var id = get_store('name_login');
