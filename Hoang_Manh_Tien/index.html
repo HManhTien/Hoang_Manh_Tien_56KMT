@@ -17,42 +17,63 @@
 </head>
 <body>
     <header>
-        <div class="logo_web">
-            <img class="anh_logo" src="IMG/anhbia.png" />
+        <div class="image-slider" id="imageSlider">
+            <img src="IMG/tieude1.jpg" />
+            <img src="IMG/tieude.jpg" />
+            <img src="IMG/tieude1.jpg" />
+            <img src="IMG/tieude2.jpg" />
+            <img src="IMG/tieude.jpg" />
         </div>
-        <div class="Tieude_web">
-            <h1>Minh Tuấn Bakery</h1>
-            <h3>Nhanh chóng , tiện lợi , Giá rẻ</h3>
-        </div>
-        <div class="logo_web">
-            <img class="anh_logo" src="IMG/Logo.png" />
+        <div class="slider-buttons">
+            <button onclick="prevImage()">&#8249;</button>
+            <button onclick="nextImage()">&#8250;</button>
         </div>
     </header>
 
-    <div class="ad-container">
-        <div class="ad">
-            <img src="IMG/Anh1.jpg" />
-            <img src="IMG/Anh2.jpg" />
-            <img src="IMG/Anh3.jpg" />
-            <img src="IMG/Anh4.jpg" />
-            <img src="IMG/Anh5.jpg" />
-            <img src="IMG/Anh6.jpg" />
-            <img src="IMG/Anh1.jpg" />
-        </div>
-    </div>
+    <script>
+        let currentIndex = 0;
+        const totalImages = document.querySelectorAll('.image-slider img').length;
+
+        function showImage(index) {
+            document.querySelectorAll('.image-slider img').forEach(img => {
+                img.style.opacity = 0;
+            });
+
+            document.querySelectorAll('.image-slider img')[index].style.opacity = 1;
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % totalImages;
+            showImage(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+            showImage(currentIndex);
+        }
+
+        function autoChangeImage() {
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalImages;
+                showImage(currentIndex);
+            }, 4000); // Chuyển ảnh mỗi 3 giây
+        }
+
+        autoChangeImage();
+    </script>
 
     <nav>
         <ul>
             <li>
-                <button class=" btn-nguyenlieu">Nguyên Liệu</button>
+                <button class="  btn-nguyenlieu">Nguyên Liệu</button>
                 <button class=" btn-dondathang-admin">Đơn đặt hàng</button>
                 <button class=" btn-doanhthu ">Doanh Thu</button>
-               
+
 
                 <button class=" btn-trangchu">Trang chủ</button>
                 <button class=" btn-dondathang">Đơn đặt hàng</button>
                 <button class=" btn-lichsumua">Lịch sử mua</button>
-               
+
 
                 <button class=" btn-login-ok btn btn-primary" id="nut-login">Đăng Nhập</button>
                 <button class=" btn btn-danger" id="nut-dangky">Đăng ký</button>
@@ -77,9 +98,9 @@
                     <input class="input-group-text input-seach" placeholder="Từ tìm kiếm ..." />
                     <button class="btn btn-primary nut-search"><ion-icon name="search-outline"></ion-icon>Tìm Kiếm</button>
                 </div>
-                <img src="IMG/Banh_database1.jpg" />
-                <img src="IMG/Banh_database2.jpg" />
-             </div>
+                <img src="IMG/Anh_order_seach1.jpg" />
+                <img src="IMG/Anh_order_seach2.jpg" />
+            </div>
         </div>
 
         <div class="body-phan-giua">
@@ -96,8 +117,9 @@
         </div>
 
     </div>
-    
-    <footer class="footer">
+
+
+    <footer class="footer" style="padding-top:20px">
         <div class="footer-top">
             <div class="container">
                 <div class="row">
@@ -150,8 +172,8 @@
                                 Minh Tuấn Bakery
                             </h3>
                             <div class="footer-contact">
-                                <p><i class="fa-map-marker-alt fa"></i><span>Phường Tích lương , Thành phố Thái Nguyên , tỉnh Thái Nguyên</span></p>
-                                <p><i class="fa-phone fa"></i><span>024 3856 3856. </span></p><p> Mail: cskh@gmail.com.vn</p>
+                                <p><i class="fa-map-marker-alt fa"></i><span>123 Ba Hàng - Phổ Yên - Thái Nguyên</span></p>
+                                <p><i class="fa-phone fa"></i><span><a href="tel:0989776730">0989 776 730</a></span></p><p> Mail: cskh@gmail.com.vn</p>
 
                             </div>
 

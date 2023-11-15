@@ -1,24 +1,38 @@
 ﻿$(document).ready(function () {
-
+    var KH_ID;
+    var KH_USER_NAME;
+    var KH_HO_DEM;
+    var KH_TEN;
+    var KH_DIA_CHI;
+    var KH_SDT;
     var logined = false;
     var admin_login = false;
     const api = '/api.aspx';
-    var data_luu_giu;
-    var MA_KHACH_HANG;
+
     var action_bandau = {
         action: 'CH_list_banh'
     }
-
-    var noi_dung_nut_xin_chao;
     login_ck();
+    Neu_khachhang_dang_nhap();
+    trang_chu_lv(action_bandau);
+
+   
+
+    autoChangeImage();
+    function getdate() {
+        var currentDate = new Date();
+        var day = currentDate.getDate();
+        var month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
+        var year = currentDate.getFullYear();
+
+        return ('' + day + '/' + month + '/' + year);
+    }
     function login_ck() {
-        var id = get_store('name_login');
-        var ck = get_store('ck_login');
         var data_gui_di = {
             action: 'US_login_ck',
-            id: id,
-            ck: ck
         }
+        var id = get_store('id');
+        var ck = get_store('ck');
         if (id != null && ck != null) {
             $.post(api, data_gui_di, function (data) {
                 login(data);
@@ -28,21 +42,27 @@
         }   
     };
     function login(data) {
-        var json = JSON.parse(data);
+        var json = JSON.parse(data);  // cgia cái dư
         if (json.ok == 1) {
 
            
             for (var user of json.data) {
-                MA_KHACH_HANG = user.ID;
+                
                 noi_dung_nut_xin_chao = `Xin Chào<b> ${user.TEN} </b>`
-                setCookie('name_login', user.ID, 365);
-                setCookie('ck_login', user.COOKIE, 365);
+                setCookie('id', user.ID, 365);
+                setCookie('ck', user.COOKIE, 365);
 
                 if (user.NAME === 'ADMIN') {
                     admin_login = true;
                     $('.btn-xinchao').html("Xin chao <b>ADMIN</b>");
                     Neu_admin_dang_nhap();
                 } else {
+                    KH_ID        = user.ID;
+                    KH_USER_NAME = user.USERNAME;
+                    KH_HO_DEM    = user.HODEM;
+                    KH_TEN       = user.TEN;
+                    KH_DIA_CHI   = user.DIACHI;
+                    KH_SDT       = user.SDT
                     $('.btn-xinchao').html(noi_dung_nut_xin_chao);
                     Neu_khachhang_dang_nhap();
                 }
@@ -59,17 +79,6 @@
             alert(json.msg)
         }
     }
-    function getdate() {
-        var currentDate = new Date();
-        var day = currentDate.getDate();
-        var month = currentDate.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
-        var year = currentDate.getFullYear();
-
-        return ('' + day + '/' + month + '/' + year);
-    }
-
-    Neu_khachhang_dang_nhap();
-    trang_chu_lv(action_bandau);
     function checkdangnhap() {
         if (!logined) {
             $.confirm({
@@ -286,27 +295,16 @@
         }
     });
     function thong_tin_ca_nhan() {
-        $.post(api, data_luu_giu, function (data) {
-            var json = JSON.parse(data);
-            var noidung = "";
-            if (json.ok) {
+                   var noidung =
+         `<pre>
+         USER NAME : ${KH_USER_NAME}
+         TÊN       : ${KH_HO_DEM + " " + KH_TEN}
+         ĐỊA CHỈ   : ${KH_DIA_CHI}
+         SDT       : ${KH_SDT}
+         </pre>`
 
-                for (var user of json.data) {
-                    noidung +=
-                        ` 
-                    <pre>
-         USER NAME : ${user.USERNAME}
-         TÊN       : ${user.HODEM + user.TEN}
-         ĐỊA CHỈ   : ${user.DIACHI}
-         SDT       : ${user.SDT}
-                    </pre>
-                `
-                }
-            } else {
-                noidung = "Không có dữ liệu nhé !!";
-            }
-            $('#danh_sach_user').html(noidung);
-        });
+         $('#danh_sach_user').html(noidung);
+       
     }
 
 
@@ -508,7 +506,7 @@
 
         trang_chu_lv(action_bandau);
     });
-    function form_muahang(mabanh, data, data1) {
+    function form_muahang(mabanh, data) {
         var banh;
         var json = JSON.parse(data);
         for (var item of json.data) {
@@ -518,64 +516,61 @@
             }
         }
         var mahoadon = Math.random();
-        var user;
-        var json = JSON.parse(data1);
-        for (var user of json.data) { }
         var content =
-            `     
-              <pre>
-                    Chào mưng quý khách
-        Mã Hóa đơn : ${mahoadon}
-        Ngày mua   : ${getdate()}
+            ` <pre>
+                    CHÀO MỪNG QUÝ KHÁCH MUA HÀNG 
+                        Mã Hóa đơn : ${mahoadon}
+                        Ngày mua   : ${getdate()}
 
-    Tên sản phẩm  : ${banh.TEN}                               <img style="width: 200px; " src="${banh.ANH}" />
-    Số lượng      : <input type="int" id="soluong" placeholder="Số lượng " required>
-    Giá Tiền      : <input type="int" id="giatien" value="${banh.GIA}" required>
-    Tên người nhận: <input type="text" id="tennguoinhan" value="${user.HODEM + " " + user.TEN}" required>
-    Địa chỉ       : <input type="text" id="diachinhan" value="${user.DIACHI}" required>
+                    Tên sản phẩm  : ${banh.TEN}  
+                    <img style="width: 170px; " src="${banh.ANH}" />
+                    Giá Tiền      : ${banh.GIA} 000 VNĐ
+                    Số lượng      : <input type="int" id="soluong" placeholder="Số lượng " required>
+                    Tên người nhận: <input type="text" id="tennguoinhan" value="${KH_HO_DEM + " " + KH_TEN}" required>
+                    Địa chỉ       : <input type="text" id="diachinhan" value="${KH_DIA_CHI}" required>
+                    Số điện thoại : <input type="text" id="diachinhan" value="${KH_SDT}" required>
     
-    </pre>
-             `
+            </pre>`
 
 
-        var dialog_edit = $.confirm({
+          $.confirm({
             title: '<b> Xác Nhận Đơn Hàng </b>',
             content: content,
-            columnClass: 'large',
+            columnClass: 'medium',
 
-            buttons: {
-                formSubmit: {
-                    text: 'Đặt hàng',
-                    btnClass: 'btn-primary',
+              buttons: {
+                  formSubmit: {
+                      text: 'Đặt hàng',
+                      btnClass: 'btn-primary',
+                      action: function () {
+                          if ($('#soluong').val() != null) {
+                              var data_bang_hoa_don = {
+                                  action: 'CH_add_hoa_don',
+                                  mahoadon: mahoadon,
+                                  Tennguoinhan: $('#tennguoinhan').val(),
+                                  diachinguoinhan: $('#diachinhan').val(),
+                                  MaKH: KH_ID,
+                                  Trangthai: 'Chờ Xác Nhận',
+                                  tongtien: $('#soluong').val() * $('#giatien').val(),
+
+                              }
 
 
-                    action: function () {
-                        var data_bang_hoa_don = {
-                            action: 'CH_add_hoa_don',
-                            mahoadon: mahoadon,
-                            Tennguoinhan: $('#tennguoinhan').val(),
-                            diachinguoinhan: $('#diachinhan').val(),
-                            MaKH: MA_KHACH_HANG,
-                            Trangthai: 'Chờ Xác Nhận',
-                            tongtien: $('#soluong').val() * $('#giatien').val(),
+                              var data_bang_chi_tiet = {
+                                  action: 'CH_add_ct_hoa_don',
+                                  mahoadon: mahoadon,
+                                  mabanh: mabanh,
+                                  soluong: $('#soluong').val(),
+                                  giaban: $('#giatien').val(),
 
-                        }
+                              }                           
+                              $.post(api, data_bang_chi_tiet, function (data) {})
+                              $.post(api, data_bang_hoa_don, function (data) {})
 
-                        var data_bang_chi_tiet = {
-                            action: 'CH_add_ct_hoa_don',
-                            mahoadon: mahoadon,
-                            mabanh: mabanh,
-                            soluong: $('#soluong').val(),
-                            giaban: $('#giatien').val(),
-
-                        }
-
-                        $.post(api, data_bang_chi_tiet, function (data) {
-
-                        })
-                        $.post(api, data_bang_hoa_don, function (data) {
-
-                        })
+                          } else {
+                              
+                              return;
+                          }
 
 
                     }
@@ -599,7 +594,7 @@
                         var muahang = `<button class="btn btn-sm btn-primary nut-mua-ngay" data-cid="${banh.MaBanh}""><ion-icon name="cart-outline"></ion-icon> Mua Ngay</button>`;
                         noidung +=
                             `
-            <div class="book-container" style="width: 25%;height :380px;  margin: 10px; text-align: center; border: 1px solid #ccc; padding: 10px; display: inline-block; box-sizing: border-box;transition: box-shadow 0.3s;" onmouseover="this.style.boxShadow='0 0 10px rgba(0, 0, 0, 0.5)'" onmouseout="this.style.boxShadow='none';">
+            <div class="book-container" style="width: 28%; height :380px;  margin: 15px; text-align: center; border: 1px solid #ccc; padding: 10px; display: inline-block; box-sizing: border-box;transition: box-shadow 0.3s;" onmouseover="this.style.boxShadow='0 0 10px rgba(0, 0, 0, 0.5)'" onmouseout="this.style.boxShadow='none';">
                     <img src="${banh.ANH}" alt="Ảnh bìa sách" style="width: 150px; height:  200px; margin-bottom: 10px;">
                     <h2 style="font-size: 18px; margin-bottom: 5px;">${banh.TEN}</h2>
                     <p class="book-price" style="font-weight: bold; color: #FF5733;">${banh.GIA} Nghìn Đồng </p>
@@ -617,13 +612,9 @@
                 $('.nut-mua-ngay').click(function () {
                     checkdangnhap();
                     var mabanh = $(this).data('cid');
-                    $.post(api, data_luu_giu, function (data1) {
-
-                        form_muahang(mabanh, data, data1);
-                    });
+                    form_muahang(mabanh, data);
                 });
-
-            });
+          });
     }
 
 
@@ -724,12 +715,13 @@
           ${++stt}.Mặt hàng số ${stt} 
                     - Tên Bánh : ${item.TENBANH}
                     - Số lượng : ${item.SOLUONG}
-                    - Giá      : ${item.GIABANH} </pre>`;
+                    - Giá      : ${item.GIABANH} 000 VNĐ
+                    </pre>`;
             }
             content += `<pre>
                  - Tên người nhận  : ${item.TEN}
                  - Địa chỉ nhận : ${item.DIACHI}
-             Tổng Tiền :     : ${item.TONGTIEN}
+             Tổng Tiền :     : ${item.TONGTIEN} 000 VNĐ
 
           Chân thành cảm ơn,
           Minh Tuấn Bakery
@@ -769,39 +761,39 @@
                 if (json.ok) {
                     noidung += `<table class="table table-hover " 
                          style="width: 70%; margin:auto"> `;
-                    noidung +=
-                        `
-     <thead>
-         <tr>
-           <th>STT</th>
-           <th>Mã Hóa Đơn</th>
-           <th>Mã Khách Hàng</th>
-           <th>Tổng Tiền</th>          
-           <th>Ngày mua</th>
-           <th>Thay đổi</th>
-         </tr>
-     </thead> <tbody>
-
-     `
+                    noidung +=`
+                             <thead>
+                                 <tr>
+                                   <th>STT</th>
+                                   <th>Mã Hóa Đơn</th>
+                                   <th>Mã Khách Hàng</th>
+                                   <th>Tổng Tiền</th>          
+                                   <th>Ngày mua</th>
+                                   <th>Thay đổi</th>
+                                 </tr>
+                             </thead> <tbody>`              
                     var stt = 0;
+                    var tongtien
                     for (var hoadon of json.data) {
+                         tongtien += hoadon.Tien;
+                        
 
                         var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
                                  data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
-                        noidung +=
-                            `
-     <tr>
-         <td>${++stt}</td>
-         <td>${hoadon.MaHD}</td>
-         <td>${hoadon.MaKH}</td>
-         <td>${hoadon.Tien}</td>  
-          <td>${hoadon.NGAY}</td>
-         <td>${thaydoi}</td>
-     </tr>
-    
-     `
+                        noidung +=`
+                             <tr>
+                                 <td>${++stt}</td>
+                                 <td>${hoadon.MaHD}</td>
+                                 <td>${hoadon.MaKH}</td>
+                                 <td>${hoadon.Tien}</td>  
+                                  <td>${hoadon.NGAY}</td>
+                                 <td>${thaydoi}</td>
+                             </tr>`
+
                     }
                     noidung += " </tbody> </table>";
+                    noidung += `<pre>SỐ TIỀN MÀ BẠN ĐÃ CHI CHO MINH TUẤN BAKERY LÀ ${tongtien} 000 VNĐ
+                                     XIN CẢM ƠN QUÝ KHÁCH ĐÃ ỦNG HỘ </pre>`;
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
@@ -853,12 +845,12 @@
           ${++stt}.Mặt hàng số ${stt} 
                     - Tên Bánh : ${item.TENBANH}
                     - Số lượng : ${item.SOLUONG}
-                    - Giá      : ${item.GIABANH} </pre>`;
+                    - Giá      : ${item.GIABANH} 000 VNĐ </pre>`;
             }
             content += `<pre>
                  - Tên người nhận  : ${item.TEN}
                  - Địa chỉ nhận : ${item.DIACHI}
-             Tổng Tiền :     : ${item.TONGTIEN}
+             Tổng Tiền :     : ${item.TONGTIEN} 000 VNĐ
 
           Chân thành cảm ơn,
           Minh Tuấn Bakery
@@ -913,8 +905,8 @@
                         |                        Số lượng bán : ${doanhthu.SOLUONG}                     
                         |                                                                               |
                         |                    3. Tổng số tiền bán được (Sẽ làm chi tiết sau)             |
-                                                   Doanh thu: ${doanhthu.TONGTIEN} $                                  
-                        |                          Lợi nhuận: ${loinhuan} $                            
+                                                   Doanh thu: ${doanhthu.TONGTIEN} 000 VNĐ                                  
+                        |                          Lợi nhuận: ${loinhuan} 000 VND                            
                         |                    4. Tổng số hóa đơn bán ra                                  |
                         |                        Số lượng: ${doanhthu.SLHD}                             
                                                                                                         |
@@ -1046,18 +1038,11 @@
         }
         return null;
     }
-    function eraseCookie(name) {
-        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
+
     function getLocal(name) {
         return window.localStorage.getItem(name);
     }
-    function setLocal(name, value) {
-        window.localStorage.setItem(name, value);
-    }
-    function delLocal(name) {
-        localStorage.removeItem(name);
-    }
+
     function get_store(key) {
         var value = getCookie(key);
         if (value == null || value == '' || value == undefined) {
