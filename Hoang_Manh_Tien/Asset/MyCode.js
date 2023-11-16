@@ -930,8 +930,7 @@
 
                     }
                     noidung += " </tbody> </table>";
-                    noidung += `<pre>SỐ TIỀN MÀ BẠN ĐÃ CHI CHO MINH TUẤN BAKERY LÀ ${tongtien} 000 VNĐ
-                                     XIN CẢM ƠN QUÝ KHÁCH ĐÃ ỦNG HỘ </pre>`;
+                    
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
@@ -1161,9 +1160,10 @@
     $('.btn-nguyenlieu').click(function () {
         add_class_not_show();
         $('.dulieuoday').removeClass('not-show');
-
         var noidung = "";
-
+        list_danh_sach_nguyen_lieu();
+    });
+    function list_danh_sach_nguyen_lieu() {
         $.post(api,
             {
                 action: 'CH_list_nguyen_lieu'
@@ -1172,10 +1172,11 @@
                 var json = JSON.parse(data);
                 var noidung = "";
                 if (json.ok) {
+                    noidung += `<pre>
+                           <button class="them-nguyen-lieu btn btn-primary"  style="padding:20px" >Thêm Nguyên Liệu</button></pre>`;
                     noidung += `<table class="table table-hover " 
                                 style="width: 70%; margin:auto"> `;
-                    noidung +=
-                        `
+                    noidung +=                        `
             <thead>
                 <tr>
                   <th>STT</th>
@@ -1186,13 +1187,10 @@
                   <th>Ngày mua</th>
                   <th>Sửa</th>
                 </tr>
-            </thead> <tbody>
-
-            `
+            </thead> <tbody> `
                     var stt = 0;
                     for (var NV of json.data) {
-                        var SUA = `<button class="sua-nguyen-lieu btn btn-warning"
-                        data-cid="${NV.MANV}>Sửa Nguyên Liệu</button>`
+                        var SUA = `<button class="sua-nguyen-lieu btn btn-warning" data-cid="${NV.MANV}">Sửa Nguyên Liệu</button>`
                         noidung +=
                             `
             <tr>
@@ -1204,39 +1202,31 @@
                  <td>${NV.DONGIA}</td>
                  <td>${SUA}</td>
                 
-            </tr>
-           
-            `
+            </tr>  `
                     }
                     noidung += " </tbody> </table>";
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
 
-                noidung += ` <pre>      
-                                                                          <button class="them-nguyen-lieu btn btn-primary" style="">Thêm Nguyên Liệu</button> 
-                 </pre>`;
-                
+
                 $('.dulieuoday').html(noidung);
 
                 $('.sua-nguyen-lieu').click(function () {
                     var mahoadon = $(this).data('cid');
-                    sua_nguyen_lieu(mahoadon ,json);
+                    sua_nguyen_lieu(mahoadon, json)
                 });
             }
-        )
-
-    });
-
+        );
+    }
     function sua_nguyen_lieu(mahoadon, json) {
         var NV;
         for (var item of json.data) {
-            if (item.ID == id) {
+            if (item.MANV == mahoadon) {
                 NV = item;
                 break;
             }
         }
-
         var content =
             `     
              <style>
@@ -1246,14 +1236,16 @@
                           }       
              </style>
             <pre>
-                  SỬA GIÁ THÔI NHÁ AE 
-            GIA       :  <input type="text" id="gia_nv" value="${user.SDT}" required>     <br />
+                             SỬA GIÁ THÔI NHÁ AE
+             
+            TÊN NGUYÊN LIỆU : ${NV.TENNV}
+            GIÁ             :  <input type="text" id="gia_nv" value="${NV.DONGIA}" required>Nghìn Đồng<br />
             </pre>
              `
         var dialog_edit = $.confirm({
            
             content: content,
-           
+           title:"",
             columnClass: 'medium',
             buttons: {
                 formSubmit: {
@@ -1270,7 +1262,7 @@
                             var json = JSON.parse(data);
                             if (json.ok) {
                                 dialog_edit.close();
-                                capnhat_list_user();
+                                list_danh_sach_nguyen_lieu();
                             } else {
                                 alert(json.msg)
                             }

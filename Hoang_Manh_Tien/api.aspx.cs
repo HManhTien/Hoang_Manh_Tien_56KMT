@@ -74,6 +74,11 @@ namespace Hoang_Manh_Tien
                     break;
                 case "CH_list_nguyen_lieu":
                     break;
+                case "CH_sua_gia_nguyen_lieu":
+                    cm.Parameters.Add("@mnv", SqlDbType.NVarChar, 50).Value = Request["manv"];
+                    cm.Parameters.Add("@giaban", SqlDbType.Int).Value = Request["gianv"];
+                    break;
+                  
 
                 case "CH_list_hoa_don":
                     break;
@@ -139,6 +144,7 @@ namespace Hoang_Manh_Tien
                 case "CH_update_xac_nhan_don_hang":
                 case "CH_tim_kiem_banh":
                 case "CH_list_nguyen_lieu":
+                case "CH_sua_gia_nguyen_lieu":
                     xuly_cuahang(action);
                     break;
             }
