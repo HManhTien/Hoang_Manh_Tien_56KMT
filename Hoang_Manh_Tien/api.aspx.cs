@@ -70,48 +70,45 @@ namespace Hoang_Manh_Tien
             SqlCommand cm = db.GetCmd("SP_Cuahang", action); //tạo cm với "SP_Company" và @action từ method GetCmd của db
             switch (action)
             {
-                case "CH_list_banh":
+                case "CH_LIST_BANH":
                     break;
-                case "CH_list_nguyen_lieu":
+                case "CH_LIST_NGUYEN_LIEU":
                     break;
-                case "CH_sua_gia_nguyen_lieu":
-                    cm.Parameters.Add("@mnv", SqlDbType.NVarChar, 50).Value = Request["manv"];
-                    cm.Parameters.Add("@giaban", SqlDbType.Int).Value = Request["gianv"];
+                case "CH_SUA_GIA_NGUYEN_LIEU":
+                    cm.Parameters.Add("@MNV", SqlDbType.NVarChar, 50).Value = Request["manv"];
+                    cm.Parameters.Add("@GIABAN", SqlDbType.Int).Value = Request["gianv"];
                     break;
                   
 
-                case "CH_list_hoa_don":
+                case "CH_LIST_HOA_DON_HOAN_THANH":
+                    break;
+                case "CH_CHI_TIET_HOA_DON":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
                     break;
 
-                case "CH_list_hoa_don_hoan_thanh":
+                case "CH_ADD_HOA_DON":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    cm.Parameters.Add("@TENNGUOINHAN", SqlDbType.NVarChar, 50).Value = Request["Tennguoinhan"];
+                    cm.Parameters.Add("@DIACHINHAN", SqlDbType.NVarChar, 50).Value = Request["diachinguoinhan"];
+                    cm.Parameters.Add("@MAKHACHHANG", SqlDbType.NVarChar, 50).Value = Request["MaKH"];
+                    cm.Parameters.Add("@TRANGTHAI", SqlDbType.NVarChar, 50).Value = Request["Trangthai"];
+                    cm.Parameters.Add("@TONGTIEN", SqlDbType.Int).Value = Request["tongtien"];
                     break;
-                case "CH_chi_tiet_hoa_don":
-                    cm.Parameters.Add("@mahoadon", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                case "CH_ADD_CT_HOA_DON":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    cm.Parameters.Add("@MABANH", SqlDbType.NVarChar, 50).Value = Request["mabanh"];
+                    cm.Parameters.Add("@SOLUONG", SqlDbType.Int).Value = Request["soluong"];
+                    cm.Parameters.Add("@GIABAN", SqlDbType.Int).Value = Request["giaban"];
                     break;
-
-                case "CH_add_hoa_don":
-                    cm.Parameters.Add("@mahoadon", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
-                    cm.Parameters.Add("@tennguoinhan", SqlDbType.NVarChar, 50).Value = Request["Tennguoinhan"];
-                    cm.Parameters.Add("@diachinhan", SqlDbType.NVarChar, 50).Value = Request["diachinguoinhan"];
-                    cm.Parameters.Add("@makhachhang", SqlDbType.NVarChar, 50).Value = Request["MaKH"];
-                    cm.Parameters.Add("@trangthai", SqlDbType.NVarChar, 50).Value = Request["Trangthai"];
-                    cm.Parameters.Add("@tongtien", SqlDbType.Int).Value = Request["tongtien"];
+                case "CH_DOANH_THU":
                     break;
-                case "CH_add_ct_hoa_don":
-                    cm.Parameters.Add("@mahoadon", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
-                    cm.Parameters.Add("@mabanh", SqlDbType.NVarChar, 50).Value = Request["mabanh"];
-                    cm.Parameters.Add("@soluong", SqlDbType.Int).Value = Request["soluong"];
-                    cm.Parameters.Add("@giaban", SqlDbType.Int).Value = Request["giaban"];
+                case "CH_XAC_NHAN_HOA_DON":
                     break;
-                case "CH_doanh_thu":
+                case "CH_UPDATE_XAC_NHAN_DON_HANG":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
                     break;
-                case "CH_xac_nhan_hoa_don":
-                    break;
-                case "CH_update_xac_nhan_don_hang":
-                    cm.Parameters.Add("@mahoadon", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
-                    break;
-                case "CH_tim_kiem_banh":
-                    cm.Parameters.Add("@tenbanh", SqlDbType.NVarChar, 50).Value = Request["tenbanh"];
+                case "CH_TIM_KIEM_BANH":
+                    cm.Parameters.Add("@TENBANH", SqlDbType.NVarChar, 50).Value = Request["tenbanh"];
                     break;
 
             }
@@ -133,18 +130,17 @@ namespace Hoang_Manh_Tien
                 case "US_DOIPW":
                     xuly_nguoidung(action);
                     break;
-                case "CH_list_banh":
-                case "CH_list_hoa_don":
-                case "CH_list_hoa_don_hoan_thanh":
-                case "CH_chi_tiet_hoa_don":
-                case "CH_add_hoa_don":
-                case "CH_add_ct_hoa_don":
-                case "CH_doanh_thu":
-                case "CH_xac_nhan_hoa_don":
-                case "CH_update_xac_nhan_don_hang":
-                case "CH_tim_kiem_banh":
-                case "CH_list_nguyen_lieu":
-                case "CH_sua_gia_nguyen_lieu":
+                case "CH_LIST_BANH":
+                case "CH_LIST_HOA_DON_HOAN_THANH":
+                case "CH_CHI_TIET_HOA_DON":
+                case "CH_ADD_HOA_DON":
+                case "CH_ADD_CT_HOA_DON":
+                case "CH_DOANH_THU":
+                case "CH_XAC_NHAN_HOA_DON":
+                case "CH_UPDATE_XAC_NHAN_DON_HANG":
+                case "CH_TIM_KIEM_BANH":
+                case "CH_LIST_NGUYEN_LIEU":
+                case "CH_SUA_GIA_NGUYEN_LIEU":
                     xuly_cuahang(action);
                     break;
             }

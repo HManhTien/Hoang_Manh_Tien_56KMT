@@ -10,7 +10,7 @@
     const api = '/api.aspx';
 
     var action_bandau = {
-        action: 'CH_list_banh'
+        action: 'CH_LIST_BANH'
     }
     login_ck();
     Neu_khachhang_dang_nhap();
@@ -41,8 +41,8 @@
         }
     };
     function login(data) {
-        var json = JSON.parse(data);  // cgia cái dư
-        if (json.ok == 1) {
+        var json = JSON.parse(data);  
+        if (json.ok  == 1) {
 
 
             for (var user of json.data) {
@@ -648,11 +648,12 @@
         var banh;
         var json = JSON.parse(data);
         for (var item of json.data) {
-            if (item.MaBanh == mabanh) {
+            if (item.MABANH == mabanh) {
                 banh = item;
                 break;
             }
         }
+        
         var mahoadon = Math.random();
         var content =
             ` <pre>
@@ -683,27 +684,28 @@
                     action: function () {
                         if ($('#soluong').val() != null) {
                             var data_bang_hoa_don = {
-                                action: 'CH_add_hoa_don',
+                                action: 'CH_ADD_HOA_DON',
                                 mahoadon: mahoadon,
                                 Tennguoinhan: $('#tennguoinhan').val(),
                                 diachinguoinhan: $('#diachinhan').val(),
                                 MaKH: KH_ID,
                                 Trangthai: 'Chờ Xác Nhận',
-                                tongtien: $('#soluong').val() * $('#giatien').val(),
+                                tongtien: $('#soluong').val() * banh.GIA,
 
                             }
 
 
                             var data_bang_chi_tiet = {
-                                action: 'CH_add_ct_hoa_don',
+                                action: 'CH_ADD_CT_HOA_DON',
                                 mahoadon: mahoadon,
                                 mabanh: mabanh,
                                 soluong: $('#soluong').val(),
                                 giaban: $('#giatien').val(),
 
                             }
-                            $.post(api, data_bang_chi_tiet, function (data) { })
                             $.post(api, data_bang_hoa_don, function (data) { })
+                            $.post(api, data_bang_chi_tiet, function (data) { })
+                            
 
                         } else {
 
@@ -729,7 +731,7 @@
                     var stt = 0;
                     for (var banh of json.data) {
 
-                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-ngay" data-cid="${banh.MaBanh}""><ion-icon name="cart-outline"></ion-icon> Mua Ngay</button>`;
+                        var muahang = `<button class="btn btn-sm btn-primary nut-mua-ngay" data-cid="${banh.MABANH}""><ion-icon name="cart-outline"></ion-icon> Mua Ngay</button>`;
                         noidung +=
                             `
             <div class="book-container" style="width: 28%; height :380px;  margin: 15px; text-align: center; border: 1px solid #ccc; padding: 10px; display: inline-block; box-sizing: border-box;transition: box-shadow 0.3s;" onmouseover="this.style.boxShadow='0 0 10px rgba(0, 0, 0, 0.5)'" onmouseout="this.style.boxShadow='none';">
@@ -764,7 +766,7 @@
         $('.data-hoa-don-dat-hang').removeClass("not-show");
         $.post(api,
             {
-                action: 'CH_xac_nhan_hoa_don'
+                action: 'CH_XAC_NHAN_HOA_DON'
             },
             function (data) {
                 var json = JSON.parse(data);
@@ -791,14 +793,14 @@
                     for (var hoadon of json.data) {
 
                         var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
-                                        data-cid="${hoadon.MaHD}">Xem chi tiết</button>`;
+                                        data-cid="${hoadon.MAHD}">Xem chi tiết</button>`;
                         noidung +=
                             `
             <tr>
                 <td>${++stt}</td>
-                <td>${hoadon.MaHD}</td>
-                <td>${hoadon.MaKH}</td>
-                <td>${hoadon.Tien}</td>
+                <td>${hoadon.MAHD}</td>
+                <td>${hoadon.MAKH}</td>
+                <td>${hoadon.TIEN}</td>
                 <td>${hoadon.TT}</td>
                  <td>${hoadon.NGAY}</td>
                 <td>${thaydoi}</td>
@@ -814,10 +816,9 @@
 
 
                 $('.nut-thay-doi').click(function () {
-                    var mahoadon = $(this).data('cid');
-
+                    var mahoadon = $(this).data('cid');                  
                     var data_gui_di = {
-                        action: 'CH_chi_tiet_hoa_don',
+                        action: 'CH_CHI_TIET_HOA_DON',
                         mahoadon: mahoadon
                     }
                     $.post(api, data_gui_di, function (data) {
@@ -831,10 +832,10 @@
 
     });
     function edit_chi_tiet_don_hang(mahoadon, data) {
-        var Hoadon;
+        var Hoadon;      
         var json = JSON.parse(data)
         for (var item of json.data) {
-            if (item.MaHD == mahoadon) {
+            if (item.MAHD == mahoadon) {
                 Hoadon = item;
                 break;
             }
@@ -843,7 +844,7 @@
         if (json.ok) {
             var content = `<pre>
              Thông Tin Đơn Hàng:
-             Mã Đơn Hàng: ${Hoadon.MaHD}
+             Mã Đơn Hàng: ${Hoadon.MAHD}
              Ngày Đặt Hàng: ${Hoadon.NGAY}
             </pre>`
 
@@ -891,7 +892,7 @@
     function list_hoa_don_hoan_thanh() {
         $.post(api,
             {
-                action: 'CH_list_hoa_don_hoan_thanh'
+                action: 'CH_LIST_HOA_DON_HOAN_THANH'
             },
             function (data) {
                 var json = JSON.parse(data);
@@ -913,17 +914,17 @@
                     var stt = 0;
                     var tongtien
                     for (var hoadon of json.data) {
-                        tongtien += hoadon.Tien;
+                        tongtien += hoadon.TIEN;
 
 
                         var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
-                                 data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
+                                 data-cid="${hoadon.MAHD}">Xem chi tiết </button>`;
                         noidung += `
                              <tr>
                                  <td>${++stt}</td>
-                                 <td>${hoadon.MaHD}</td>
-                                 <td>${hoadon.MaKH}</td>
-                                 <td>${hoadon.Tien}</td>  
+                                 <td>${hoadon.MAHD}</td>
+                                 <td>${hoadon.MAKH}</td>
+                                 <td>${hoadon.TIEN}</td>  
                                   <td>${hoadon.NGAY}</td>
                                  <td>${thaydoi}</td>
                              </tr>`
@@ -940,7 +941,7 @@
                 $('.nut-thay-doi').click(function () {
                     var mahoadon = $(this).data('cid');
                     var data_gui_di = {
-                        action: 'CH_chi_tiet_hoa_don',
+                        action: 'CH_CHI_TIET_HOA_DON',
                         mahoadon: mahoadon
                     }
                     $.post(api, data_gui_di, function (data) {
@@ -955,7 +956,7 @@
         var Hoadon;
         var json = JSON.parse(data)
         for (var item of json.data) {
-            if (item.MaHD == mahoadon) {
+            if (item.MAHD == mahoadon) {
                 Hoadon = item;
                 break;
             }
@@ -972,7 +973,7 @@
           của bạn:
 
          Thông Tin Đơn Hàng:
-             Mã Đơn Hàng: ${Hoadon.MaHD}
+             Mã Đơn Hàng: ${Hoadon.MAHD}
              Ngày Đặt Hàng: ${Hoadon.NGAY}
             </pre>`
 
@@ -1021,7 +1022,7 @@
     function xem_doanh_thu() {
         $.post(api,
             {
-                action: 'CH_doanh_thu'
+                action: 'CH_DOANH_THU'
             },
             function (data) {
                 var json = JSON.parse(data);
@@ -1047,7 +1048,7 @@
                         |                    4. Tổng số hóa đơn bán ra                                  |
                         |                        Số lượng: ${doanhthu.SLHD}                             
                                                                                                         |
-                        |        OK Đã Thông kê xong bán không được là do maketting thôi                |
+                        |        ok Đã Thông kê xong bán không được là do maketting thôi                |
                                  không phải do web đâu nhé                                              
                         |                                                                               |
                         |_______________________________________________________________________________|
@@ -1071,7 +1072,7 @@
     function list_xac_nhan_hoa_don() {
         $.post(api,
             {
-                action: 'CH_xac_nhan_hoa_don'
+                action: 'CH_XAC_NHAN_HOA_DON'
             },
             function (data) {
                 var json = JSON.parse(data);
@@ -1098,14 +1099,14 @@
                     for (var hoadon of json.data) {
 
                         var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
-                                        data-cid="${hoadon.MaHD}">Xác Nhận</button>`;
+                                        data-cid="${hoadon.MAHD}">Xác Nhận</button>`;
                         noidung +=
                             `
             <tr>
                 <td>${++stt}</td>
-                <td>${hoadon.MaHD}</td>
-                <td>${hoadon.MaKH}</td>
-                <td>${hoadon.Tien}</td>
+                <td>${hoadon.MAHD}</td>
+                <td>${hoadon.MAKH}</td>
+                <td>${hoadon.TIEN}</td>
                 <td>${hoadon.TT}</td>
                  <td>${hoadon.NGAY}</td>
                 <td>${thaydoi}</td>
@@ -1131,7 +1132,7 @@
     };
     function update_xac_nhan_don_hang(mahoadon) {
         var data_gui_di = {
-            action: 'CH_update_xac_nhan_don_hang',
+            action: 'CH_UPDATE_XAC_NHAN_DON_HANG',
             mahoadon: mahoadon
         }
 
@@ -1140,12 +1141,7 @@
         })
     };
 
-    $('.btn-nguyenlieu').click(function () {
-        add_class_not_show();
-        $('.data-trang-chu').removeClass("not-show");
 
-
-    });
 
     $('.nut-search').click(function () {
 
@@ -1166,7 +1162,7 @@
     function list_danh_sach_nguyen_lieu() {
         $.post(api,
             {
-                action: 'CH_list_nguyen_lieu'
+                action: 'CH_LIST_NGUYEN_LIEU'
             },
             function (data) {
                 var json = JSON.parse(data);
@@ -1254,7 +1250,7 @@
 
                     action: function () {
                         var data_gui_di = {
-                            action: 'CH_sua_gia_nguyen_lieu',
+                            action: 'CH_SUA_GIA_NGUYEN_LIEU',
                             manv: mahoadon,
                             gianv: $('#gia_nv').val()
                         }                    
@@ -1275,7 +1271,7 @@
         });
 
     }
-    ////// PHẦN NÀY COOKIE NHÉ //////////////
+    ////// PHẦN NÀY COokIE NHÉ //////////////
     function setCookie(name, value, days) {
         var expires = "";
         if (days) {
