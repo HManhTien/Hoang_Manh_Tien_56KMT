@@ -16,9 +16,8 @@
     Neu_khachhang_dang_nhap();
     trang_chu_lv(action_bandau);
 
-   
 
-    autoChangeImage();
+
     function getdate() {
         var currentDate = new Date();
         var day = currentDate.getDate();
@@ -39,15 +38,15 @@
             });
         } else {
             return;
-        }   
+        }
     };
     function login(data) {
         var json = JSON.parse(data);  // cgia cái dư
         if (json.ok == 1) {
 
-           
+
             for (var user of json.data) {
-                
+
                 noi_dung_nut_xin_chao = `Xin Chào<b> ${user.TEN} </b>`
                 setCookie('id', user.ID, 365);
                 setCookie('ck', user.COOKIE, 365);
@@ -57,17 +56,17 @@
                     $('.btn-xinchao').html("Xin chao <b>ADMIN</b>");
                     Neu_admin_dang_nhap();
                 } else {
-                    KH_ID        = user.ID;
+                    KH_ID = user.ID;
                     KH_USER_NAME = user.USERNAME;
-                    KH_HO_DEM    = user.HODEM;
-                    KH_TEN       = user.TEN;
-                    KH_DIA_CHI   = user.DIACHI;
-                    KH_SDT       = user.SDT
+                    KH_HO_DEM = user.HODEM;
+                    KH_TEN = user.TEN;
+                    KH_DIA_CHI = user.DIACHI;
+                    KH_SDT = user.SDT
                     $('.btn-xinchao').html(noi_dung_nut_xin_chao);
                     Neu_khachhang_dang_nhap();
                 }
             }
-            
+
             logined = true;
             $('#nut-login').addClass("not-show");
             $('#nut-dangky').addClass("not-show");
@@ -152,7 +151,7 @@
         admin_login = false;
         logined = false;
         $('.data-trang-chu').removeClass("not-show");
-        trang_chu_lv();
+        trang_chu_lv(action_bandau);
         setCookie('ck_login', null, 365);
     });
     //Xử lý xong rồi
@@ -234,25 +233,30 @@
                   input {
                      border: 1px solid #ccc;
                      border-radius: 5px;
-                          }       
+                          }  
+                   .form-group{
+                       margin:auto inherit;
+                   }
              </style>
              <div class="form-group">
                 <label for="create-name">Name :</label><br>
-                <input type="text" id="login-name" placeholder="Your name" required>
+                <input type="text"  id="login-name" placeholder="Your name" required>
             </div>
             <div class="form-group">
                 <label for="create-pw">Mật khẩu :</label><br>
-                <input type="text" id="login-pw" placeholder="Your password" required>
+                <input type="password" id="login-pw" placeholder="Your password" required>   
+                <b> <p id="message11"></p></b>
             </div>                 
              `
-        var dialog_dangnhap = $.confirm({
+
+       $.confirm({
             title: 'Đăng Nhập!',
             content: content,
             buttons: {
                 formSubmit: {
                     text: 'Đăng Nhập',
                     btnClass: 'btn-primary',
-
+                    keys: ['enter', 'enter'],
                     action: function () {
                         var data_gui_di = {
                             action: 'US_login',
@@ -264,15 +268,21 @@
                             User_Name: $('#login-name').val(),
                             pw: $('#login-pw').val()
                         }
-
-
                         $.post(api, data_gui_di, function (data) {
-                            login(data);
-                            dialog_dangnhap.close();
+                            var json = JSON.parse(data)
+                            if (json.ok == 1) {
+                                login(data);
+                               
+                            } else {
+                                $('#message11').html('Sai thông  tin đăng nhập');
+                                return false; 
+                            }
+                           
                         })
                     }
                 },
                 cancel: {},
+
             },
         });
     };
@@ -287,27 +297,154 @@
                 title: "Thông tin cá nhân",
                 content: `<div id="danh_sach_user">Loading....</div>`,
                 columnClass: 'small',
+                buttons: {
+                    formSubmit: {
+                        text: 'Change PW',
+                        btnClass: 'btn-primary',
+                        action: function () {
+                            do_change_pw();
+                            }
+                        },
+                    EDIT: {
+                        text: 'EDIT',
+                        btnClass: 'btn-warning',
+                        action: function () {
+                            edit_thong_tin_ca_nhan();
+                        }
+                    },
+                    CANCEL: {},
+                },
                 onContentReady: function () {
-                    //khi trang tải xong
                     thong_tin_ca_nhan();
+
                 }
             });
         }
     });
     function thong_tin_ca_nhan() {
-                   var noidung =
-         `<pre>
+        var noidung =
+            `<pre>
          USER NAME : ${KH_USER_NAME}
          TÊN       : ${KH_HO_DEM + " " + KH_TEN}
          ĐỊA CHỈ   : ${KH_DIA_CHI}
          SDT       : ${KH_SDT}
          </pre>`
 
-         $('#danh_sach_user').html(noidung);
-       
+        $('#danh_sach_user').html(noidung);
+
     }
+    function do_change_pw() {
+        $.confirm({
+            title: 'ĐỔI MẬT KHẨU CÁC CHẾ ƠI !!!',
+            content:
+                `
+                <pre>
+            1. Mật khẩu Cũ:
+                <input type="password"  id="pw" placeholder="Vui lòng nhập" required>
+            2. Mật khẩu Mới:
+                <input type="password"  id="pw_new" placeholder="Vui lòng nhập" required>               
+            3. Xác Nhận Mật khẩu:
+                <input type="password"  id="pw_newxn" placeholder="Vui lòng nhập" required>
+            <b> <p id="message"></p></b>
+                </pre>
+                `,
+            buttons: {
+                SAVE: {
+                    btnClass: 'btn-warning',
+                 
+                    action: function () {
+                        var newpw = $('#pw_new').val();
+                        var newpwxn = $('#pw_newxn').val();
+                        var pw = $('#pw').val();
+                        if (newpw == newpwxn) {
+                            $.post(api, {
+                                action: 'US_DOIPW',
+                                id: KH_ID,
+                                pw: pw,
+                                new_pw: newpw
+                            }, function (data) {
+                                var json = JSON.parse(data);
+                                if (json.ok == 1) {
+
+                                } else {
+                                    $('#message').html('Sai Mật khẩu cũ ');
+                                    return false; 
+
+                                }
+                            })
+                        } else {
+                            $('#message').html('vui lòng nhập lại giá trị');
+                            return false;         
+                        }
 
 
+
+                    }
+                },
+                EXIT: {},
+            }
+
+        })
+    }
+    function edit_thong_tin_ca_nhan() {
+        var content =
+            `     
+     <style>
+          input {
+             border: 1px solid #ccc;
+             border-radius: 5px;
+                  }       
+     </style>
+    <pre>
+    USER NAME : <input type="text" id="tao-name" value="${KH_USER_NAME}" required> <br />
+
+    HỌ ĐỆM    :  <input type="text" id="tao-hodem" value="${KH_HO_DEM}" required>   <br />
+
+    TÊN       :  <input type="text" id="tao-ten" value="${KH_TEN}" required>     <br />
+
+    ĐỊA CHỈ   :  <input type="text" id="tao-diachi" value="${KH_DIA_CHI}" required>   <br />
+
+    SDT       :  <input type="text" id="tao-SDT" value="${KH_SDT}" required>     <br />
+    </pre>
+     `
+        var dialog_edit = $.confirm({
+            title: `SỬA ĐỔI THÔNG TIN - ${KH_HO_DEM}!`,
+            content: content,
+            icon: 'fa fa-key',
+            columnClass: 'medium',
+            buttons: {
+                formSubmit: {
+                    text: 'Đăng ký',
+                    btnClass: 'btn-primary',
+
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'US_edit',
+                            id: KH_ID,
+                            User_Name: $('#tao-name').val(),
+                            hodem: $('#tao-hodem').val(),
+                            ten: $('#tao-ten').val(),
+                            diachi: $('#tao-diachi').val(),
+                            SDT: $('#tao-SDT').val()
+                        }
+
+                        console.log(data_gui_di);
+                        $.post(api, data_gui_di, function (data) {
+                            var json = JSON.parse(data);
+                            if (json.ok) {
+                                dialog_edit.close();
+                                thong_tin_ca_nhan();
+                            } else {
+                                alert(json.msg)
+                            }
+                        })
+
+                    }
+                },
+                cancel: {},
+            },
+        });
+    }
 
     //admin đăng nhập 
     function list_user() {
@@ -321,6 +458,7 @@
             }
         });
     };
+
     function capnhat_list_user() {
         $.post(api,
             {
@@ -533,44 +671,44 @@
             </pre>`
 
 
-          $.confirm({
+        $.confirm({
             title: '<b> Xác Nhận Đơn Hàng </b>',
             content: content,
             columnClass: 'medium',
 
-              buttons: {
-                  formSubmit: {
-                      text: 'Đặt hàng',
-                      btnClass: 'btn-primary',
-                      action: function () {
-                          if ($('#soluong').val() != null) {
-                              var data_bang_hoa_don = {
-                                  action: 'CH_add_hoa_don',
-                                  mahoadon: mahoadon,
-                                  Tennguoinhan: $('#tennguoinhan').val(),
-                                  diachinguoinhan: $('#diachinhan').val(),
-                                  MaKH: KH_ID,
-                                  Trangthai: 'Chờ Xác Nhận',
-                                  tongtien: $('#soluong').val() * $('#giatien').val(),
+            buttons: {
+                formSubmit: {
+                    text: 'Đặt hàng',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        if ($('#soluong').val() != null) {
+                            var data_bang_hoa_don = {
+                                action: 'CH_add_hoa_don',
+                                mahoadon: mahoadon,
+                                Tennguoinhan: $('#tennguoinhan').val(),
+                                diachinguoinhan: $('#diachinhan').val(),
+                                MaKH: KH_ID,
+                                Trangthai: 'Chờ Xác Nhận',
+                                tongtien: $('#soluong').val() * $('#giatien').val(),
 
-                              }
+                            }
 
 
-                              var data_bang_chi_tiet = {
-                                  action: 'CH_add_ct_hoa_don',
-                                  mahoadon: mahoadon,
-                                  mabanh: mabanh,
-                                  soluong: $('#soluong').val(),
-                                  giaban: $('#giatien').val(),
+                            var data_bang_chi_tiet = {
+                                action: 'CH_add_ct_hoa_don',
+                                mahoadon: mahoadon,
+                                mabanh: mabanh,
+                                soluong: $('#soluong').val(),
+                                giaban: $('#giatien').val(),
 
-                              }                           
-                              $.post(api, data_bang_chi_tiet, function (data) {})
-                              $.post(api, data_bang_hoa_don, function (data) {})
+                            }
+                            $.post(api, data_bang_chi_tiet, function (data) { })
+                            $.post(api, data_bang_hoa_don, function (data) { })
 
-                          } else {
-                              
-                              return;
-                          }
+                        } else {
+
+                            return;
+                        }
 
 
                     }
@@ -614,7 +752,7 @@
                     var mabanh = $(this).data('cid');
                     form_muahang(mabanh, data);
                 });
-          });
+            });
     }
 
 
@@ -743,7 +881,7 @@
 
     // Nút lịch sử mua hàng được bấm
     ////////////////////////////////
-    $('.btn-lichsumua').click(function () {  
+    $('.btn-lichsumua').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
         $('.data-hoa-don-dat-hang').removeClass("not-show");
@@ -761,7 +899,7 @@
                 if (json.ok) {
                     noidung += `<table class="table table-hover " 
                          style="width: 70%; margin:auto"> `;
-                    noidung +=`
+                    noidung += `
                              <thead>
                                  <tr>
                                    <th>STT</th>
@@ -771,16 +909,16 @@
                                    <th>Ngày mua</th>
                                    <th>Thay đổi</th>
                                  </tr>
-                             </thead> <tbody>`              
+                             </thead> <tbody>`
                     var stt = 0;
                     var tongtien
                     for (var hoadon of json.data) {
-                         tongtien += hoadon.Tien;
-                        
+                        tongtien += hoadon.Tien;
+
 
                         var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
                                  data-cid="${hoadon.MaHD}">Xem chi tiết </button>`;
-                        noidung +=`
+                        noidung += `
                              <tr>
                                  <td>${++stt}</td>
                                  <td>${hoadon.MaHD}</td>
@@ -976,10 +1114,13 @@
            
             `
                     }
-                    noidung += " </tbody> </table>";
+                    noidung += " </tbody> </table>"
+
+                    
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
+               
                 $('.data-hoa-don-dat-hang').html(noidung);
 
 
@@ -1016,8 +1157,132 @@
         trang_chu_lv(data_gui_di)
     });
 
+    ////////Nút Nguyên liệu được bấm//////
+    $('.btn-nguyenlieu').click(function () {
+        add_class_not_show();
+        $('.dulieuoday').removeClass('not-show');
 
+        var noidung = "";
 
+        $.post(api,
+            {
+                action: 'CH_list_nguyen_lieu'
+            },
+            function (data) {
+                var json = JSON.parse(data);
+                var noidung = "";
+                if (json.ok) {
+                    noidung += `<table class="table table-hover " 
+                                style="width: 70%; margin:auto"> `;
+                    noidung +=
+                        `
+            <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã Hóa Đơn</th>
+                  <th>Mã Khách Hàng</th>
+                  <th>Giá </th>
+                  <th>Trạng Thái</th>
+                  <th>Ngày mua</th>
+                  <th>Sửa</th>
+                </tr>
+            </thead> <tbody>
+
+            `
+                    var stt = 0;
+                    for (var NV of json.data) {
+                        var SUA = `<button class="sua-nguyen-lieu btn btn-warning"
+                        data-cid="${NV.MANV}>Sửa Nguyên Liệu</button>`
+                        noidung +=
+                            `
+            <tr>
+                <td>${++stt}</td>
+                <td>${NV.MANV}</td>
+                <td>${NV.TENNV}</td>
+                <td>${NV.SL}</td>
+                <td>${NV.DVT}</td>
+                 <td>${NV.DONGIA}</td>
+                 <td>${SUA}</td>
+                
+            </tr>
+           
+            `
+                    }
+                    noidung += " </tbody> </table>";
+                } else {
+                    noidung = "Không có dữ liệu nhé !!";
+                }
+
+                noidung += ` <pre>      
+                                                                          <button class="them-nguyen-lieu btn btn-primary" style="">Thêm Nguyên Liệu</button> 
+                 </pre>`;
+                
+                $('.dulieuoday').html(noidung);
+
+                $('.sua-nguyen-lieu').click(function () {
+                    var mahoadon = $(this).data('cid');
+                    sua_nguyen_lieu(mahoadon ,json);
+                });
+            }
+        )
+
+    });
+
+    function sua_nguyen_lieu(mahoadon, json) {
+        var NV;
+        for (var item of json.data) {
+            if (item.ID == id) {
+                NV = item;
+                break;
+            }
+        }
+
+        var content =
+            `     
+             <style>
+                  input {
+                     border: 1px solid #ccc;
+                     border-radius: 5px;
+                          }       
+             </style>
+            <pre>
+                  SỬA GIÁ THÔI NHÁ AE 
+            GIA       :  <input type="text" id="gia_nv" value="${user.SDT}" required>     <br />
+            </pre>
+             `
+        var dialog_edit = $.confirm({
+           
+            content: content,
+           
+            columnClass: 'medium',
+            buttons: {
+                formSubmit: {
+                    text: 'SAVE',
+                    btnClass: 'btn-primary',
+
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'CH_sua_gia_nguyen_lieu',
+                            manv: mahoadon,
+                            gianv: $('#gia_nv').val()
+                        }                    
+                        $.post(api, data_gui_di, function (data) {
+                            var json = JSON.parse(data);
+                            if (json.ok) {
+                                dialog_edit.close();
+                                capnhat_list_user();
+                            } else {
+                                alert(json.msg)
+                            }
+                        })
+
+                    }
+                },
+                cancel: {},
+            },
+        });
+
+    }
     ////// PHẦN NÀY COOKIE NHÉ //////////////
     function setCookie(name, value, days) {
         var expires = "";

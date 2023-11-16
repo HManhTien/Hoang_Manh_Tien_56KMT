@@ -70,7 +70,8 @@ button {
 .trang-chu-benphai {
     flex: 30%;
     background-color: #808080;
-    height: 1000px
+    height: 1000px;
+  
 }
     .trang-chu-benphai img {
         width: 350px;
