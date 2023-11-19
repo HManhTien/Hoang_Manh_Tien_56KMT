@@ -1,17 +1,20 @@
 ﻿$(document).ready(function () {
+    const api = '/api.aspx';
+
     var KH_ID;
     var KH_USER_NAME;
     var KH_HO_DEM;
     var KH_TEN;
     var KH_DIA_CHI;
     var KH_SDT;
+
     var logined = false;
     var admin_login = false;
-    const api = '/api.aspx';
-
+    var check_dung_chat = false;
     var action_bandau = {
         action: 'CH_LIST_BANH'
     }
+
     login_ck();
     Neu_khachhang_dang_nhap();
     trang_chu_lv(action_bandau);
@@ -41,8 +44,8 @@
         }
     };
     function login(data) {
-        var json = JSON.parse(data);  
-        if (json.ok  == 1) {
+        var json = JSON.parse(data);
+        if (json.ok == 1) {
 
 
             for (var user of json.data) {
@@ -112,11 +115,8 @@
         return false;
     };
     function add_class_not_show() {
-        $('.data-trang-chu').addClass("not-show");
-        $('.data-hoa-don-dat-hang').addClass("not-show");
-        $('.data-lich-su-don-hang').addClass("not-show");
-        $('.data-phan-hoi').addClass("not-show");
-        $('.dulieuoday').addClass("not-show");
+        $('.du-lieu-lam-viec').addClass("not-show");
+        $('.du-lieu-lam-viec2').addClass("not-show");     
     }
     function Neu_khachhang_dang_nhap() {
         $('.btn-nguyenlieu').addClass("not-show");
@@ -150,7 +150,7 @@
         add_class_not_show();
         admin_login = false;
         logined = false;
-        $('.data-trang-chu').removeClass("not-show");
+        $('.du-lieu-lam-viec').removeClass("not-show");
         trang_chu_lv(action_bandau);
         setCookie('ck_login', null, 365);
     });
@@ -249,7 +249,7 @@
             </div>                 
              `
 
-       $.confirm({
+        $.confirm({
             title: 'Đăng Nhập!',
             content: content,
             buttons: {
@@ -272,12 +272,11 @@
                             var json = JSON.parse(data)
                             if (json.ok == 1) {
                                 login(data);
-                               
                             } else {
                                 $('#message11').html('Sai thông  tin đăng nhập');
-                                return false; 
+                                return false;
                             }
-                           
+
                         })
                     }
                 },
@@ -303,8 +302,8 @@
                         btnClass: 'btn-primary',
                         action: function () {
                             do_change_pw();
-                            }
-                        },
+                        }
+                    },
                     EDIT: {
                         text: 'EDIT',
                         btnClass: 'btn-warning',
@@ -351,7 +350,7 @@
             buttons: {
                 SAVE: {
                     btnClass: 'btn-warning',
-                 
+
                     action: function () {
                         var newpw = $('#pw_new').val();
                         var newpwxn = $('#pw_newxn').val();
@@ -368,13 +367,13 @@
 
                                 } else {
                                     $('#message').html('Sai Mật khẩu cũ ');
-                                    return false; 
+                                    return false;
 
                                 }
                             })
                         } else {
                             $('#message').html('vui lòng nhập lại giá trị');
-                            return false;         
+                            return false;
                         }
 
 
@@ -640,7 +639,7 @@
     $('.btn-trangchu').click(function () {
         add_class_not_show();
 
-        $('.data-trang-chu').removeClass("not-show");
+        $('.du-lieu-lam-viec').removeClass("not-show");
 
         trang_chu_lv(action_bandau);
     });
@@ -653,7 +652,7 @@
                 break;
             }
         }
-        
+
         var mahoadon = Math.random();
         var content =
             ` <pre>
@@ -705,7 +704,7 @@
                             }
                             $.post(api, data_bang_hoa_don, function (data) { })
                             $.post(api, data_bang_chi_tiet, function (data) { })
-                            
+
 
                         } else {
 
@@ -746,7 +745,7 @@
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
-                $('.data-table-trang-chu').html(noidung);
+                $('.du-lieu-lam-viec').html(noidung);
 
 
                 $('.nut-mua-ngay').click(function () {
@@ -763,7 +762,7 @@
     $('.btn-dondathang').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.data-hoa-don-dat-hang').removeClass("not-show");
+        $('.du-lieu-lam-viec').removeClass("not-show");
         $.post(api,
             {
                 action: 'CH_XAC_NHAN_HOA_DON'
@@ -773,7 +772,7 @@
                 var noidung = "";
                 if (json.ok) {
                     noidung += `<table class="table table-hover " 
-                                style="width: 70%; margin:auto"> `;
+                                style="width: 90%; margin:auto"> `;
                     noidung +=
                         `
             <thead>
@@ -812,11 +811,11 @@
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
-                $('.data-hoa-don-dat-hang').html(noidung);
+                $('.du-lieu-lam-viec').html(noidung);
 
 
                 $('.nut-thay-doi').click(function () {
-                    var mahoadon = $(this).data('cid');                  
+                    var mahoadon = $(this).data('cid');
                     var data_gui_di = {
                         action: 'CH_CHI_TIET_HOA_DON',
                         mahoadon: mahoadon
@@ -832,7 +831,7 @@
 
     });
     function edit_chi_tiet_don_hang(mahoadon, data) {
-        var Hoadon;      
+        var Hoadon;
         var json = JSON.parse(data)
         for (var item of json.data) {
             if (item.MAHD == mahoadon) {
@@ -885,7 +884,7 @@
     $('.btn-lichsumua').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.data-hoa-don-dat-hang').removeClass("not-show");
+        $('.du-lieu-lam-viec').removeClass("not-show");
 
         list_hoa_don_hoan_thanh();
     });
@@ -899,7 +898,7 @@
                 var noidung = "";
                 if (json.ok) {
                     noidung += `<table class="table table-hover " 
-                         style="width: 70%; margin:auto"> `;
+                         style="width: 90%; margin:auto"> `;
                     noidung += `
                              <thead>
                                  <tr>
@@ -931,11 +930,11 @@
 
                     }
                     noidung += " </tbody> </table>";
-                    
+
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
-                $('.data-hoa-don-dat-hang').html(noidung);
+                $('.du-lieu-lam-viec').html(noidung);
 
 
                 $('.nut-thay-doi').click(function () {
@@ -1012,9 +1011,8 @@
         alert('ko dc bấm');
         if (checkdangnhap()) return;
         add_class_not_show();
-
-        $('.dulieuoday').removeClass("not-show");
-        $('.data-hoa-don-dat-hang').removeClass("not-show");
+        $('.du-lieu-lam-viec2').removeClass("not-show");
+        $('.du-lieu-lam-viec').removeClass("not-show");
         xem_doanh_thu();
         list_hoa_don_hoan_thanh();
 
@@ -1054,7 +1052,7 @@
                         |_______________________________________________________________________________|
                         </pre>`
                     }
-                    $('.dulieuoday').html(noidung);
+                    $('.du-lieu-lam-viec2').html(noidung);
                 } else {
                     alert([json.msg]);
                 }
@@ -1066,7 +1064,7 @@
     $('.btn-dondathang-admin').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.data-hoa-don-dat-hang').removeClass("not-show");
+        $('.du-lieu-lam-viec').removeClass("not-show");
         list_xac_nhan_hoa_don();
     });
     function list_xac_nhan_hoa_don() {
@@ -1079,7 +1077,7 @@
                 var noidung = "";
                 if (json.ok) {
                     noidung += `<table class="table table-hover " 
-                                style="width: 70%; margin:auto"> `;
+                                style="width: 90%; margin:auto"> `;
                     noidung +=
                         `
             <thead>
@@ -1116,12 +1114,12 @@
                     }
                     noidung += " </tbody> </table>"
 
-                    
+
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
-               
-                $('.data-hoa-don-dat-hang').html(noidung);
+
+                $('.du-lieu-lam-viec').html(noidung);
 
 
                 $('.nut-thay-doi').click(function () {
@@ -1155,7 +1153,7 @@
     ////////Nút Nguyên liệu được bấm//////
     $('.btn-nguyenlieu').click(function () {
         add_class_not_show();
-        $('.dulieuoday').removeClass('not-show');
+        $('.du-lieu-lam-viec').removeClass('not-show');
         var noidung = "";
         list_danh_sach_nguyen_lieu();
     });
@@ -1171,8 +1169,8 @@
                     noidung += `<pre>
                            <button class="them-nguyen-lieu btn btn-primary"  style="padding:20px" >Thêm Nguyên Liệu</button></pre>`;
                     noidung += `<table class="table table-hover " 
-                                style="width: 70%; margin:auto"> `;
-                    noidung +=                        `
+                                style="width: 90%; margin:auto"> `;
+                    noidung += `
             <thead>
                 <tr>
                   <th>STT</th>
@@ -1206,7 +1204,7 @@
                 }
 
 
-                $('.dulieuoday').html(noidung);
+                $('.du-lieu-lam-viec').html(noidung);
 
                 $('.sua-nguyen-lieu').click(function () {
                     var mahoadon = $(this).data('cid');
@@ -1239,9 +1237,9 @@
             </pre>
              `
         var dialog_edit = $.confirm({
-           
+
             content: content,
-           title:"",
+            title: "",
             columnClass: 'medium',
             buttons: {
                 formSubmit: {
@@ -1253,7 +1251,7 @@
                             action: 'CH_SUA_GIA_NGUYEN_LIEU',
                             manv: mahoadon,
                             gianv: $('#gia_nv').val()
-                        }                    
+                        }
                         $.post(api, data_gui_di, function (data) {
                             var json = JSON.parse(data);
                             if (json.ok) {
@@ -1271,7 +1269,142 @@
         });
 
     }
-    ////// PHẦN NÀY COokIE NHÉ //////////////
+
+
+    $('.nut-message').click(function () {
+        if ($('.chat-area').hasClass('not-show')) {
+            $('.goc-anh').addClass("not-show");
+            $('.chat-area').removeClass("not-show");
+            check_dung_chat = true;
+        } else {
+            $('.goc-anh').removeClass("not-show");
+            $('.chat-area').addClass("not-show");
+            check_dung_chat = false;
+        }
+       
+
+        thuc_hien_lai();
+       
+        $('.nut-chat-gui').click(function () {
+            var dulieu = $('.input-field').val();
+            alert('Sai đâu đó')
+            var data_gui_di_1 = {
+                action: 'CHAT_ADD_DU_LIEU_ADMIN',
+                machat: '3',
+                admin: dulieu
+            }
+            var data_gui_di = {
+                action: 'CHAT_ADD_DU_LIEU_KHACH',
+                machat: KH_ID,
+                khachhang : dulieu
+            }
+            if (!admin_login) {
+                $.post(api, data_gui_di, function (data) {
+                    var json = JSON.parse(data);
+                    if (json.ok == 1) {
+                        $('.input-field').val('');
+                    } else {
+                        alert(json.msg)
+                    }
+                });
+            } else {
+                $.post(api, data_gui_di_1, function (data) {
+                    var json = JSON.parse(data);
+                    if (json.ok == 1) {
+                        $('.input-field').val('');
+                    } else {
+                        alert(json.msg)
+                    }
+                });
+            }
+        });
+    });
+    function du_lieu_doan_chat_admin() {
+        var data_gui_di = {
+            action: 'CHAT_LIST',
+            machat: '3'
+        }
+        $.post(api, data_gui_di, function (data) {
+            var json = JSON.parse(data);
+            var noidung_out = "";
+            for (var CHAT of json.data) {
+                if (CHAT.ADMIN != 'NULL') {
+                    noidung_out +=
+                        `
+                     <div class="chat outgoing">
+                         <div class="detail">
+                           <p>${CHAT.ADMIN}</p>
+                        </div>
+                     </div>
+                         `
+                }
+                if (CHAT.KHACH_HANG != 'NULL') {
+                    noidung_out +=
+                        `
+                <div class="chat incomming">
+                    <div class="detail">
+                           <p>${CHAT.KHACH_HANG}</p>
+                    </div>
+                 </div>
+                `
+                }
+            }
+            $('.chat-box').html(noidung_out);
+        });
+    }
+    function du_lieu_doan_chat() {
+        var data_gui_di = {
+            action: 'CHAT_LIST',
+            machat: '3'
+        }
+        $.post(api, data_gui_di, function (data) {
+            var json = JSON.parse(data);
+            var noidung_out = "";
+            for (var CHAT of json.data) {
+                if (CHAT.KHACH_HANG != 'NULL') {
+                    noidung_out +=
+                        `
+                     <div class="chat outgoing">
+                         <div class="detail">
+                           <p>${CHAT.KHACH_HANG}</p>
+                        </div>
+                     </div>
+                         `
+                }
+                if (CHAT.ADMIN != 'NULL') {
+                    noidung_out +=
+                        `
+                <div class="chat incomming">
+                    <div class="detail">
+                           <p>${CHAT.ADMIN}</p>
+                    </div>
+                 </div>
+                `
+                }
+            }
+            $('.chat-box').html(noidung_out);
+        });
+    } 
+    function thuc_hien_lai() {
+        if (!check_dung_chat) {        
+            return;
+        }
+        else {
+            if (!admin_login) {
+                du_lieu_doan_chat();
+            } else {
+                du_lieu_doan_chat_admin();
+            }     
+            const chatBox = document.querySelector('.chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+            setTimeout(thuc_hien_lai, 500);
+        }
+       
+       
+    }
+
+
+    ////// PHẦN NÀY COOKIE NHÉ //////////////
     function setCookie(name, value, days) {
         var expires = "";
         if (days) {

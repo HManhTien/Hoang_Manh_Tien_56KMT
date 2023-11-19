@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html>
 <head>
     <title>Minh Tuấn Bakery</title>
@@ -11,13 +12,14 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
     <script src="asset/mycode.js"></script>
     <link href="Asset/Header.css" rel="stylesheet" />
+    <link href="Asset/Chat.css" rel="stylesheet" />
     <link rel="shortcut icon" href="#" />
-    <link href="Asset/footer.css" rel="stylesheet" />
+   
 </head>
 <body>
+
     <header>
         <div class="image-slider" id="imageSlider">
             <img src="IMG/tieude1.jpg" />
@@ -31,7 +33,7 @@
             <button onclick="nextImage()">&#8250;</button>
         </div>
     </header>
-    
+
     <script>
         let currentIndex = 0;
         const totalImages = document.querySelectorAll('.image-slider img').length;
@@ -58,10 +60,12 @@
             setInterval(() => {
                 currentIndex = (currentIndex + 1) % totalImages;
                 showImage(currentIndex);
-            }, 4000); // Chuyển ảnh mỗi 3 giây
+            }, 3000); // Chuyển ảnh mỗi 3 giây
         }
 
         autoChangeImage();
+
+
     </script>
 
     <nav>
@@ -76,7 +80,10 @@
                 <button class=" btn-dondathang">Đơn đặt hàng</button>
                 <button class=" btn-lichsumua">Lịch sử mua</button>
 
-                
+
+                <label class="nut-message"><ion-icon name="chatbox-ellipses-outline"></ion-icon>Mesage</label>
+
+
                 <button class=" btn-login-ok btn btn-primary" id="nut-login">Đăng Nhập</button>
                 <button class=" btn btn-danger" id="nut-dangky">Đăng ký</button>
                 <label class=" btn-login-ok btn-xinchao not-show" id="text-xinchao"></label>
@@ -85,39 +92,38 @@
         </ul>
     </nav>
 
-   
-    <div class="Phan-body">
 
-        <!----Trang chủ ---->
-        <!------------------>
-        <div class="data-trang-chu">
-            <div class="table-trang-chu">
-                <div class="data-table-trang-chu">
-                </div>
+    <div class="Phan-body">
+        <div class="trang-chu-ben-trai">
+            <div class="du-lieu-lam-viec2">
             </div>
-            <div class="trang-chu-benphai">
+            <div  class="du-lieu-lam-viec">
+            </div>
+        </div>
+            <div class="trang-chu-ben-phai">
                 <div class="trang-chu-title">
                     <input class="input-group-text input-seach" placeholder="Từ tìm kiếm ..." />
                     <button class="btn btn-primary nut-search"><ion-icon name="search-outline"></ion-icon>Tìm Kiếm</button>
                 </div>
-                <img src="IMG/Anh_order_seach1.jpg" />
-                <img src="IMG/Anh_order_seach2.jpg" />
-            </div>
-        </div>
+                <div class="goc-anh">
+                    <img src="IMG/Anh_order_seach1.jpg" />
+                    <img src="IMG/Anh_order_seach2.jpg" />
+                </div>
+                <section class="chat-area not-show">
+                    <header>
+                        <p> Cuộc Trò Chuyện </p>    
+                    </header>
+                    <div class="chat-box">
 
-        <div class="body-phan-giua">
-            <!----DATA doanh thu ---->
-            <!----------------------->
-            <div class="dulieuoday">
+                    </div>
+                    <div class="typing-area">
+                        <input type="text" name="incomming_id" class="incomming_id" id="" hidden />
+                        <input type="text" name="message" class="input-field" placeholder="Nội dung nhập" autocomplete="off" />
+                        <button class="nut-chat-gui"><ion-icon name="navigate-outline"></ion-icon></button>
+                    </div>
 
-            </div>
-
-            <!----Hóa đơn   ---->
-            <!------------------>
-            <div class="data-hoa-don-dat-hang">
-            </div>
-        </div>
-
+                </section>
+             </div>
     </div>
 
 

@@ -116,6 +116,27 @@ namespace Hoang_Manh_Tien
             Response.Write(json); //trả json về trình duyệt
         }
 
+        void xuly_chat(string action)
+        {
+            SqlServer db = new SqlServer();
+            SqlCommand cm = db.GetCmd("SP_CHAT", action); //tạo cm với "SP_Company" và @action từ method GetCmd của db
+            switch (action)
+            {
+                case "CHAT_LIST":
+                    cm.Parameters.Add("@MA_CHAT", SqlDbType.NVarChar, 50).Value = Request["machat"];
+                    break;
+                case "CHAT_ADD_DU_LIEU_KHACH":
+                    cm.Parameters.Add("@MA_CHAT", SqlDbType.NVarChar, 50).Value = Request["machat"];
+                    cm.Parameters.Add("@KHACH_HANG", SqlDbType.NVarChar, 50).Value = Request["khachhang"];
+                    break;
+                case "CHAT_ADD_DU_LIEU_ADMIN":
+                    cm.Parameters.Add("@MA_CHAT", SqlDbType.NVarChar, 50).Value = Request["machat"];
+                    cm.Parameters.Add("@ADMIN", SqlDbType.NVarChar, 50).Value = Request["admin"];
+                    break;
+            }
+            string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
+            Response.Write(json); //trả json về trình duyệt
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             string action = Request["action"];
@@ -142,6 +163,11 @@ namespace Hoang_Manh_Tien
                 case "CH_LIST_NGUYEN_LIEU":
                 case "CH_SUA_GIA_NGUYEN_LIEU":
                     xuly_cuahang(action);
+                    break;
+                case "CHAT_LIST":
+                case "CHAT_ADD_DU_LIEU_KHACH":
+                case "CHAT_ADD_DU_LIEU_ADMIN":
+                    xuly_chat(action);
                     break;
             }
         }

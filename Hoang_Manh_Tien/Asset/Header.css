@@ -2,125 +2,12 @@
     font-family: Arial, sans-serif;
 }
 
-/*  ------------------  */
-/*  ------------------  */
-
-nav {
-    display :flex;
-    background-color: #7ca974;
-    color: white;
-    padding: 3px;
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-li {
-    display: inline;
-    margin-right: 20px;
-}
-
-button {
-    background: none;
-    border: none;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-    button:hover {
-        text-decoration: underline;
-    }
-     
-
-
-
-/*  ------------------  */
-/*  ------------------  */
-.not-show{
-    display:none !important;
-}
-
-
-.btn-xinchao{
-    color:black;
-}
-
-
-/*  ---------Phần Giữa ---------  */
-
-.data-trang-chu {
-    display: flex;
-    flex-direction: row;
-    max-height:1000px;
-}
-
-.table-trang-chu {
-    flex: 70%;
-    border-right: 2px solid #a59090;
-    background-color: antiquewhite;
-    overflow-y: auto; /* Thiết lập overflow-y thành auto để hiển thị thanh cuộn dọc khi cần */
-    border: 1px solid #ccc;
-}
-
-
-.trang-chu-benphai {
-    flex: 30%;
-    background-color: #808080;
-    height: 1000px;
-  
-}
-    .trang-chu-benphai img {
-        width: 350px;
-        height: auto;
-        padding-left: 40px;
-        padding-bottom:2px inherit;
-       
-    }
-.trang-chu-title {
-        display: flex;
-        padding : 20px;
-    }
-    .trang-chu-title input {
-        width: 250px; /* Kích thước mong muốn của phần tử */
-        height: 50px;
-    }
-    .trang-chu-title button {
-        height: 50px;
-        width: 100px;
-        padding: 0 0;
-    }
-
-
-.btn-login-ok {
-    margin-left: 850px;
-}
-
-
-.Phan-body {
-    height :1000px;
-}
-
-.dulieuoday{
-    margin :auto;
-}
-
-
-/*  ---------CHO CAI TIEU ĐỀ ẢNH  ---------  */
-/*  ----------------------------  ---------  */
-/*  ----------------------------  ---------  */
-/*  ----------------------------  ---------  */
-
 .image-slider {
     position: relative;
     width: 1500px;
     height: 250px; /* 100% chiều cao của viewport */
     overflow: hidden;
 }
-
     .image-slider img {
         position: absolute;
         top: 0;
@@ -140,7 +27,6 @@ button {
     justify-content: space-between;
     align-items: center;
 }
-
     .slider-buttons button {
         background: none;
         border: none;
@@ -149,3 +35,162 @@ button {
         color: white;
     }
 
+
+nav {
+    display :flex;
+    background-color: #7ca974;
+    color: white;
+    padding: 5px;
+}
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+         nav ul button {
+            background: none;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+.nut-message {
+    margin-left: 590px;
+    margin-right: 10px;
+}
+
+
+    #nut-login {
+        margin-left: 5px;
+    }
+
+#text-xinchao {
+    margin-left: 5px;
+    margin-right: 10px;
+    color: black;
+}
+
+.setup-Chuong-thong-bao {
+    position: relative;
+    display: inline-block;
+}
+
+    .setup-Chuong-thong-bao .so-thong-bao-moi {
+        position: absolute;
+        background-color: red;
+        color: white;
+        border-radius: 100%;
+        font-size: 12px;
+    }
+
+.setup-tro-chuyen {
+    position: relative;
+    display: inline-block;
+}
+
+    .setup-tro-chuyen .so-tro-chuyen-moi {
+        position: absolute;
+        background-color: red;
+        color: white;
+        border-radius: 100%;
+        font-size: 12px;
+    }
+
+
+
+/*  ---------Phần Giữa --------------------  */
+/*  ---------------------------------------  */
+/*  ---------------------------------------  */
+
+
+
+.Phan-body {
+    height: 1000px;
+    display: flex;
+    flex-direction: row;
+    max-height: 1000px;
+}
+
+
+    .trang-chu-ben-trai {
+        flex: 70%;
+        border-right: 2px solid #a59090;
+        background-color: antiquewhite;
+        overflow-y: auto; /* Thiết lập overflow-y thành auto để hiển thị thanh cuộn dọc khi cần */
+        border: 1px solid #ccc;
+    }
+    .trang-chu-ben-phai {
+        flex: 30%;
+        background-color: #808080;
+        height: 1000px;
+  
+    }
+        .trang-chu-ben-phai img {
+            width: 350px;
+            height: auto;
+            padding-left: 40px;
+            padding-bottom:2px inherit;
+       
+        }
+            .trang-chu-title {
+                    display: flex;
+                    padding : 20px;
+                }
+                .trang-chu-title input {
+                    width: 250px; /* Kích thước mong muốn của phần tử */
+                    height: 50px;
+                }
+                .trang-chu-title button {
+                    height: 50px;
+                    width: 100px;
+                    padding: 0 0;
+                }
+
+
+.not-show {
+    display: none !important;
+}
+
+
+/*  ---------Phần Cuối --------------------  */
+/*  ---------------------------------------  */
+/*  ---------------------------------------  */
+
+.footer {
+    background-color: #ac9696;
+}
+.footer-top {
+    margin-bottom: 30px;
+}
+.footer-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+.footer-col {
+    padding: 0 15px;
+}
+.footer-contact p {
+    margin: 0;
+    font-size: 16px;
+    color: #555;
+}
+.logo-footer img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+.footer-bottom {
+    padding: 10px 0;
+    background-color: #333;
+    color: #fff;
+}
+    .footer-bottom a {
+        color: #fff;
+        text-decoration: none;
+    }
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }

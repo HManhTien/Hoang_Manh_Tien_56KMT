@@ -74,7 +74,8 @@
     <Content Include="Asset\jquery.min.js" />
     <Content Include="Asset\MyCode.js" />
     <Content Include="Asset\Header.css" />
-    <Content Include="Asset\footer.css" />
+    <Content Include="Asset\Chat.css" />
+    <Content Include="ICON\bell.png" />
     <Content Include="IMG\Anh_order_seach1.jpg" />
     <Content Include="IMG\Anh_order_seach2.jpg" />
     <Content Include="IMG\banhkem_mini_25K.jpg" />
