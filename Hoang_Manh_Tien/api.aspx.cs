@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using SuatAn;
 using static System.Collections.Specialized.BitVector32;
+using System.Security.Cryptography;
 
 namespace Hoang_Manh_Tien
 {
@@ -93,6 +94,7 @@ namespace Hoang_Manh_Tien
                     cm.Parameters.Add("@MAKHACHHANG", SqlDbType.NVarChar, 50).Value = Request["MaKH"];
                     cm.Parameters.Add("@TRANGTHAI", SqlDbType.NVarChar, 50).Value = Request["Trangthai"];
                     cm.Parameters.Add("@TONGTIEN", SqlDbType.Int).Value = Request["tongtien"];
+                    cm.Parameters.Add("@SDT_NHAN", SqlDbType.Int).Value = Request["sdt"];
                     break;
                 case "CH_ADD_CT_HOA_DON":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
@@ -104,8 +106,12 @@ namespace Hoang_Manh_Tien
                     break;
                 case "CH_XAC_NHAN_HOA_DON":
                     break;
+                 case "CH_DON_HANG_DANG_GIAO":
+                    break;
                 case "CH_UPDATE_XAC_NHAN_DON_HANG":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    cm.Parameters.Add("@MASHIPER", SqlDbType.NVarChar, 50).Value = Request["mashiper"];
+                    cm.Parameters.Add("@THOI_GIAN_SHIP", SqlDbType.NVarChar, 50).Value = Request["thoigian"];
                     break;
                 case "CH_TIM_KIEM_BANH":
                     cm.Parameters.Add("@TENBANH", SqlDbType.NVarChar, 50).Value = Request["tenbanh"];
@@ -162,6 +168,7 @@ namespace Hoang_Manh_Tien
                 case "CH_TIM_KIEM_BANH":
                 case "CH_LIST_NGUYEN_LIEU":
                 case "CH_SUA_GIA_NGUYEN_LIEU":
+                case "CH_DON_HANG_DANG_GIAO":
                     xuly_cuahang(action);
                     break;
                 case "CHAT_LIST":

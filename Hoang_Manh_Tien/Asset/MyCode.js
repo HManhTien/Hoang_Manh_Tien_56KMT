@@ -666,7 +666,7 @@
                     Số lượng      : <input type="int" id="soluong" placeholder="Số lượng " required>
                     Tên người nhận: <input type="text" id="tennguoinhan" value="${KH_HO_DEM + " " + KH_TEN}" required>
                     Địa chỉ       : <input type="text" id="diachinhan" value="${KH_DIA_CHI}" required>
-                    Số điện thoại : <input type="text" id="diachinhan" value="${KH_SDT}" required>
+                    Số điện thoại : <input type="text" id="sdtnhan" value="${KH_SDT}" required>
     
             </pre>`
 
@@ -685,12 +685,13 @@
                             var data_bang_hoa_don = {
                                 action: 'CH_ADD_HOA_DON',
                                 mahoadon: mahoadon,
-                                Tennguoinhan: $('#tennguoinhan').val(),
-                                diachinguoinhan: $('#diachinhan').val(),
                                 MaKH: KH_ID,
+                                MaKH: KH_ID,
+                                Tennguoinhan: $('#tennguoinhan').val(),
+                                diachinguoinhan: $('#diachinhan').val(),                              
                                 Trangthai: 'Chờ Xác Nhận',
                                 tongtien: $('#soluong').val() * banh.GIA,
-
+                                sdt: $('#sdtnhan').val(),
                             }
 
 
@@ -762,10 +763,10 @@
     $('.btn-dondathang').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.du-lieu-lam-viec').removeClass("not-show");
+        $('.du-lieu-lam-viec2').removeClass("not-show");
         $.post(api,
             {
-                action: 'CH_XAC_NHAN_HOA_DON'
+                action: 'CH_DON_HANG_DANG_GIAO'
             },
             function (data) {
                 var json = JSON.parse(data);
@@ -788,12 +789,13 @@
             </thead> <tbody>
 
             `
-                    var stt = 0;
-                    for (var hoadon of json.data) {
 
-                        var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
+                
+                var stt = 0;
+                for (var hoadon of json.data) {
+                 var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
                                         data-cid="${hoadon.MAHD}">Xem chi tiết</button>`;
-                        noidung +=
+                noidung +=
                             `
             <tr>
                 <td>${++stt}</td>
@@ -811,26 +813,22 @@
                 } else {
                     noidung = "Không có dữ liệu nhé !!";
                 }
-                $('.du-lieu-lam-viec').html(noidung);
-
-
+                $('.du-lieu-lam-viec2').html(noidung);
                 $('.nut-thay-doi').click(function () {
                     var mahoadon = $(this).data('cid');
                     var data_gui_di = {
-                        action: 'CH_CHI_TIET_HOA_DON',
+                        action: 'CH_CHI_TIET_HOA_DON_DANG_GIAO',
                         mahoadon: mahoadon
                     }
                     $.post(api, data_gui_di, function (data) {
-                        edit_chi_tiet_don_hang(mahoadon, data);
+                        edit_chi_tiet_don_hang(mahoadon, data ,trangthai);
                     })
                 });
 
-            });
-
-
+            }); 
 
     });
-    function edit_chi_tiet_don_hang(mahoadon, data) {
+    function edit_chi_tiet_don_hang(mahoadon, data, trangthai) {
         var Hoadon;
         var json = JSON.parse(data)
         for (var item of json.data) {
@@ -857,9 +855,10 @@
                     </pre>`;
             }
             content += `<pre>
-                 - Tên người nhận  : ${item.TEN}
-                 - Địa chỉ nhận : ${item.DIACHI}
-             Tổng Tiền :     : ${item.TONGTIEN} 000 VNĐ
+                 - Tên người nhận  : ${item.TEN_NHAN}
+                 - Địa chỉ nhận    : ${item.DIACHI}
+                 - Số Điện Thoại   : ${item.SDT}
+             Tổng Tiền :     : ${item.TONG_TIEN} 000 VNĐ
 
           Chân thành cảm ơn,
           Minh Tuấn Bakery
@@ -1128,15 +1127,42 @@
                 });
             });
     };
-    function update_xac_nhan_don_hang(mahoadon) {
-        var data_gui_di = {
-            action: 'CH_UPDATE_XAC_NHAN_DON_HANG',
-            mahoadon: mahoadon
-        }
+    function update_xac_nhan_don_hang(mahoadon) { 
+        var content =
+            `<pre>         
+           
+    SHIPER        :  <select id="chooseOption" name="chooseOption">
+                    <option value="SHIPER01">Hoàng Mạnh Tiến</option>
+                    <option value="SHIPER02">Hoàng tràn Phâu</option>
+                    </select>
 
-        $.post(api, data_gui_di, function (data) {
-            list_xac_nhan_hoa_don();
-        })
+    THỜI GIAN SHIP:  <input type="text" class="timesship" placeholder="thời gian ship" /> PHÚT
+             </pre>`
+
+        $.confirm({
+            title: 'XÁC NHẬN ĐƠN ĐẶT HÀNG',
+            content: content,
+            buttons: {
+                formSubmit: {
+                    text: 'XÁC NHẬN',
+                    btnClass: 'btn-primary',
+                    keys: ['enter', 'enter'],
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'CH_UPDATE_XAC_NHAN_DON_HANG',
+                            mahoadon: mahoadon,
+                            mashiper: $('#chooseOption').val(),
+                            thoigian: $('.timesship').val()
+                        }                      
+                        $.post(api, data_gui_di, function (data) {
+                            list_xac_nhan_hoa_don();
+                        });
+                    }
+                },
+                cancel: {},
+
+            },
+        });
     };
 
 
