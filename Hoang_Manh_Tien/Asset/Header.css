@@ -85,18 +85,6 @@ nav {
         font-size: 12px;
     }
 
-.setup-tro-chuyen {
-    position: relative;
-    display: inline-block;
-}
-
-    .setup-tro-chuyen .so-tro-chuyen-moi {
-        position: absolute;
-        background-color: red;
-        color: white;
-        border-radius: 100%;
-        font-size: 12px;
-    }
 
 
 

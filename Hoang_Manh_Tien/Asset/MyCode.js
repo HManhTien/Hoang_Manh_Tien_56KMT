@@ -116,7 +116,7 @@
     };
     function add_class_not_show() {
         $('.du-lieu-lam-viec').addClass("not-show");
-        $('.du-lieu-lam-viec2').addClass("not-show");     
+        $('.du-lieu-lam-viec2').addClass("not-show");
     }
     function Neu_khachhang_dang_nhap() {
         $('.btn-nguyenlieu').addClass("not-show");
@@ -688,7 +688,7 @@
                                 MaKH: KH_ID,
                                 MaKH: KH_ID,
                                 Tennguoinhan: $('#tennguoinhan').val(),
-                                diachinguoinhan: $('#diachinhan').val(),                              
+                                diachinguoinhan: $('#diachinhan').val(),
                                 Trangthai: 'Chờ Xác Nhận',
                                 tongtien: $('#soluong').val() * banh.GIA,
                                 sdt: $('#sdtnhan').val(),
@@ -763,7 +763,11 @@
     $('.btn-dondathang').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.du-lieu-lam-viec2').removeClass("not-show");
+        $('.du-lieu-lam-viec2').removeClass("not-show"); 
+        list_hoa_don_dat_hang();
+    });
+
+    function list_hoa_don_dat_hang() {
         $.post(api,
             {
                 action: 'CH_DON_HANG_DANG_GIAO'
@@ -780,7 +784,7 @@
                 <tr>
                   <th>STT</th>
                   <th>Mã Hóa Đơn</th>
-                  <th>Mã Khách Hàng</th>
+                  <th>TÊN NGƯỜI NHẬN</th>
                   <th>Tổng Tiền</th>
                   <th>Trạng Thái</th>
                   <th>Ngày mua</th>
@@ -790,17 +794,28 @@
 
             `
 
-                
-                var stt = 0;
-                for (var hoadon of json.data) {
-                 var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
-                                        data-cid="${hoadon.MAHD}">Xem chi tiết</button>`;
-                noidung +=
-                            `
+
+                    var stt = 0;
+                    for (var hoadon of json.data) {
+                        var tt = hoadon.TT;
+
+                        var thaydoi = `<button class="btn btn-sm btn-warning nut-thay-doi" 
+                                        data-cid="${hoadon.MAHD}" data-chitiet ="chi_tiet" data-trangthai ="${hoadon.TT}">Xem chi tiết</button>`;
+
+                        if (tt == 'Chờ Xác Nhận') {
+                            thaydoi += `<button class="btn btn-sm btn-danger nut-thay-doi" 
+                                        data-cid="${hoadon.MAHD}" data-action ="CH_HUY_DON">HỦY ĐƠN</button>`;
+
+                        } else {
+                            thaydoi += `<button class="btn btn-sm btn-primary nut-thay-doi" 
+                                        data-cid="${hoadon.MAHD}" data-action ="CH_DA_NHAN_DUOC_HANG">ĐÃ NHẬN</button>`
+                        }
+                        noidung +=
+                            `.
             <tr>
                 <td>${++stt}</td>
                 <td>${hoadon.MAHD}</td>
-                <td>${hoadon.MAKH}</td>
+                <td>${hoadon.TENNGUOINHAN}</td>
                 <td>${hoadon.TIEN}</td>
                 <td>${hoadon.TT}</td>
                  <td>${hoadon.NGAY}</td>
@@ -816,65 +831,214 @@
                 $('.du-lieu-lam-viec2').html(noidung);
                 $('.nut-thay-doi').click(function () {
                     var mahoadon = $(this).data('cid');
-                    var data_gui_di = {
-                        action: 'CH_CHI_TIET_HOA_DON_DANG_GIAO',
-                        mahoadon: mahoadon
+                    var trangthai = $(this).data('trangthai');
+                    var action = $(this).data('action');
+                    var chitiet = $(this).data('chitiet');
+
+                    if (chitiet == 'chi_tiet') {
+                        if (trangthai == 'Chờ Xác Nhận') {
+                            edit_chi_tiet_don_hang(mahoadon);
+                        } else {
+                            edit_chi_tiet_don_hang_dg(mahoadon);
+                        }
+                    } else {
+                        if (action == 'CH_HUY_DON') {
+                            HUY_DON_HANG(mahoadon, action, json)
+                        } else if (action == 'CH_DA_NHAN_DUOC_HANG') {
+                           
+                           DA_NHAN_HANG(mahoadon, action ,json)
+                        } else {
+                            alert('Lỗi đâu rồi ấy')
+                        }
                     }
-                    $.post(api, data_gui_di, function (data) {
-                        edit_chi_tiet_don_hang(mahoadon, data ,trangthai);
-                    })
                 });
+            });
 
-            }); 
+    }
+    function edit_chi_tiet_don_hang(mahoadon) {
+        $.post(api,
+            {
+                action: 'CH_CHI_TIET_HOA_DON',
+                mahoadon :mahoadon
+            }, function (data) {
+                var Hoadon;
+                var json = JSON.parse(data)
+                for (var item of json.data) {
+                    if (item.MAHD == mahoadon) {
+                        Hoadon = item;
+                        break;
+                    }
+                }
 
-    });
-    function edit_chi_tiet_don_hang(mahoadon, data, trangthai) {
-        var Hoadon;
-        var json = JSON.parse(data)
+                if (json.ok) {
+                    var content = `<pre>
+                     Thông Tin Đơn Hàng:
+                     Mã Đơn Hàng: ${Hoadon.MAHD}
+                     Ngày Đặt Hàng: ${Hoadon.NGAY}
+                    </pre>`
+
+                            var stt = 0;
+                            for (var item of json.data) {
+                                content += `<pre>
+                  ${++stt}.Mặt hàng số ${stt} 
+                            - Tên Bánh : ${item.TENBANH}
+                            - Số lượng : ${item.SOLUONG}
+                            - Giá      : ${item.GIABANH} 000 VNĐ
+                            </pre>`;
+                            }
+                            content += `<pre>
+                         - Tên người nhận  : ${item.TEN_NHAN}
+                         - Địa chỉ nhận    : ${item.DIACHI}
+                         - Số Điện Thoại   : ${item.SDT}
+                     Tổng Tiền :     : ${item.TONG_TIEN} 000 VNĐ
+
+                  Chân thành cảm ơn,
+                  Minh Tuấn Bakery
+                  Đội Ngũ Hỗ Trợ Khách Hàng</pre>`;
+
+
+                    $.confirm({
+                        title: "",
+                        columnClass: 'large',
+                        content: content,
+                        buttons: {
+                            cancel: {},
+                        },
+                    });
+                } else {
+                    alet('không có dữ liệu')
+                }
+            })
+    }
+    function edit_chi_tiet_don_hang_dg(mahoadon) {
+        $.post(api,
+            {
+                action: 'CH_CHI_TIET_HOA_DON_HOAN_THANH',
+                mahoadon: mahoadon
+            }, function (data) {
+                var Hoadon;
+                var json = JSON.parse(data)
+                for (var item of json.data) {
+                    if (item.MAHD == mahoadon) {
+                        Hoadon = item;
+                        break;
+                    }
+                }
+
+                if (json.ok) {
+                    var content = `<pre>
+                     Thông Tin Đơn Hàng:
+                     Mã Đơn Hàng: ${Hoadon.MAHD}
+                     Ngày Đặt Hàng: ${Hoadon.NGAY}
+                    </pre>`
+
+                    var stt = 0;
+                    for (var item of json.data) {
+                        content += `<pre>
+                  ${++stt}.Mặt hàng số ${stt} 
+                            - Tên Bánh : ${item.TENBANH}
+                            - Số lượng : ${item.SOLUONG}
+                            - Giá      : ${item.GIABANH} 000 VNĐ
+                            </pre>`;
+                    }
+                    content += `<pre>
+                         - Tên người nhận  : ${item.TEN_NHAN}
+                         - Địa chỉ nhận    : ${item.DIACHI}
+                         - Số Điện Thoại   : ${item.SDT}
+                     Tổng Tiền :     : ${item.TONG_TIEN} 000 VNĐ
+
+                     Người Giao Hàng :${item.TEN_SHIPER}
+                     Số điện thoại   :${item.SDT_SHIPER}
+                     Thời Gian ship dự kiến : ${item.TIME_SHIP} PHÚT
+                  Chân thành cảm ơn,
+                  Minh Tuấn Bakery
+                  Đội Ngũ Hỗ Trợ Khách Hàng</pre>`;
+
+
+                    $.confirm({
+                        title: "",
+                        columnClass: 'large',
+                        content: content,
+                        buttons: {
+                            cancel: {},
+                        },
+                    });
+                } else {
+                    alet('không có dữ liệu')
+                }
+            })
+    };
+    function HUY_DON_HANG(mahoadon, action ,json) {
+        var hoadon;
         for (var item of json.data) {
             if (item.MAHD == mahoadon) {
-                Hoadon = item;
+                hoadon = item;
                 break;
             }
         }
-
-        if (json.ok) {
-            var content = `<pre>
-             Thông Tin Đơn Hàng:
-             Mã Đơn Hàng: ${Hoadon.MAHD}
-             Ngày Đặt Hàng: ${Hoadon.NGAY}
-            </pre>`
-
-            var stt = 0;
-            for (var item of json.data) {
-                content += `<pre>
-          ${++stt}.Mặt hàng số ${stt} 
-                    - Tên Bánh : ${item.TENBANH}
-                    - Số lượng : ${item.SOLUONG}
-                    - Giá      : ${item.GIABANH} 000 VNĐ
-                    </pre>`;
-            }
-            content += `<pre>
-                 - Tên người nhận  : ${item.TEN_NHAN}
-                 - Địa chỉ nhận    : ${item.DIACHI}
-                 - Số Điện Thoại   : ${item.SDT}
-             Tổng Tiền :     : ${item.TONG_TIEN} 000 VNĐ
-
-          Chân thành cảm ơn,
-          Minh Tuấn Bakery
-          Đội Ngũ Hỗ Trợ Khách Hàng</pre>`;
-
-
-            $.confirm({
-                title: "",
-                columnClass: 'large',
-                content: content,
-                buttons: {
-                    cancel: {},
+        var dialog_huydonhang = $.confirm({
+            title: ` XÓA HÓA ĐƠN NÀY NHÉ !! `,
+            content: ``,
+            buttons: {
+                YES: {
+                    action: function () {
+                        var data_gui_di = {
+                            action: action,
+                            mahoadon: mahoadon
+                        }
+                        $.post(api, data_gui_di, function (data) {                          
+                            var json = JSON.parse(data); //json string text => obj
+                            if (json.ok) { //dùng obj
+                                dialog_huydonhang.close();
+                                list_hoa_don_dat_hang();
+                            } else {
+                                alert(json.msg) // lỗi gì ở trên lo, ta cứ show ra thôi
+                            }
+                        })
+                    }
                 },
-            });
-        };
+                NO: {
+
+                }
+            }
+        })
     }
+    function DA_NHAN_HANG(mahoadon, action, json) {
+        var hoadon;
+        for (var item of json.data) {
+            if (item.MAHD == mahoadon) {
+                hoadon = item;
+                break;
+            }
+        }
+        var dialog_huydonhang = $.confirm({
+            title: ` ĐÃ NHẬN ĐƯỢC HÀNG!! `,
+            content: ``,
+            buttons: {
+                YES: {
+                    action: function () {
+                        var data_gui_di = {
+                            action: action,
+                            mahoadon: mahoadon
+                        }
+                        $.post(api, data_gui_di, function (data) {
+                            var json = JSON.parse(data); //json string text => obj
+                            if (json.ok) { //dùng obj
+                                dialog_huydonhang.close();
+                                list_hoa_don_dat_hang();
+                            } else {
+                                alert(json.msg) // lỗi gì ở trên lo, ta cứ show ra thôi
+                            }
+                        })
+                    }
+                },
+                NO: {
+
+                }
+            }
+        })
+    }
+ 
 
 
 
@@ -903,7 +1067,7 @@
                                  <tr>
                                    <th>STT</th>
                                    <th>Mã Hóa Đơn</th>
-                                   <th>Mã Khách Hàng</th>
+                                   <th>Người Nhận</th>
                                    <th>Tổng Tiền</th>          
                                    <th>Ngày mua</th>
                                    <th>Thay đổi</th>
@@ -921,7 +1085,7 @@
                              <tr>
                                  <td>${++stt}</td>
                                  <td>${hoadon.MAHD}</td>
-                                 <td>${hoadon.MAKH}</td>
+                                 <td>${hoadon.TEN_NGUOI_NHAN}</td>
                                  <td>${hoadon.TIEN}</td>  
                                   <td>${hoadon.NGAY}</td>
                                  <td>${thaydoi}</td>
@@ -938,73 +1102,11 @@
 
                 $('.nut-thay-doi').click(function () {
                     var mahoadon = $(this).data('cid');
-                    var data_gui_di = {
-                        action: 'CH_CHI_TIET_HOA_DON',
-                        mahoadon: mahoadon
-                    }
-                    $.post(api, data_gui_di, function (data) {
-                        chitiethoadon(mahoadon, data);
-                    })
-
+                   edit_chi_tiet_don_hang_dg(mahoadon);
                 });
-
             });
     }
-    function chitiethoadon(mahoadon, data) {
-        var Hoadon;
-        var json = JSON.parse(data)
-        for (var item of json.data) {
-            if (item.MAHD == mahoadon) {
-                Hoadon = item;
-                break;
-            }
-        }
-        if (json.ok) {
-            var content = `<pre>
-                    Chào Quý Khách hàng
-
-          Chúng tôi xin chân thành cảm ơn sự tin tưởng và lựa chọn của 
-          Quý khách hàng tại Minh Tuấn Bakery.
-
-          Chúng tôi xác nhận rằng đơn hàng của bạn đã được nhận và đang 
-          được xử lý .Dưới đây là một số thông tin chi tiết về đơn hàng 
-          của bạn:
-
-         Thông Tin Đơn Hàng:
-             Mã Đơn Hàng: ${Hoadon.MAHD}
-             Ngày Đặt Hàng: ${Hoadon.NGAY}
-            </pre>`
-
-            var stt = 0;
-            for (var item of json.data) {
-                content += `<pre>
-          ${++stt}.Mặt hàng số ${stt} 
-                    - Tên Bánh : ${item.TENBANH}
-                    - Số lượng : ${item.SOLUONG}
-                    - Giá      : ${item.GIABANH} 000 VNĐ </pre>`;
-            }
-            content += `<pre>
-                 - Tên người nhận  : ${item.TEN}
-                 - Địa chỉ nhận : ${item.DIACHI}
-             Tổng Tiền :     : ${item.TONGTIEN} 000 VNĐ
-
-          Chân thành cảm ơn,
-          Minh Tuấn Bakery
-          Đội Ngũ Hỗ Trợ Khách Hàng</pre>`;
-
-            $.confirm({
-                title: "",
-                columnClass: 'large',
-                content: content,
-                buttons: {
-                    cancel: {},
-                },
-            });
-        }
-
-    }
-
-
+  
 
     $('.btn-doanhthu').click(function () {
         alert('ko dc bấm');
@@ -1083,7 +1185,7 @@
                 <tr>
                   <th>STT</th>
                   <th>Mã Hóa Đơn</th>
-                  <th>Mã Khách Hàng</th>
+                  <th>Tên người nhận</th>
                   <th>Tổng Tiền</th>
                   <th>Trạng Thái</th>
                   <th>Ngày mua</th>
@@ -1102,7 +1204,7 @@
             <tr>
                 <td>${++stt}</td>
                 <td>${hoadon.MAHD}</td>
-                <td>${hoadon.MAKH}</td>
+                <td>${hoadon.TENNGUOINHAN}</td>
                 <td>${hoadon.TIEN}</td>
                 <td>${hoadon.TT}</td>
                  <td>${hoadon.NGAY}</td>
@@ -1127,7 +1229,7 @@
                 });
             });
     };
-    function update_xac_nhan_don_hang(mahoadon) { 
+    function update_xac_nhan_don_hang(mahoadon) {
         var content =
             `<pre>         
            
@@ -1153,7 +1255,7 @@
                             mahoadon: mahoadon,
                             mashiper: $('#chooseOption').val(),
                             thoigian: $('.timesship').val()
-                        }                      
+                        }
                         $.post(api, data_gui_di, function (data) {
                             list_xac_nhan_hoa_don();
                         });
@@ -1307,10 +1409,10 @@
             $('.chat-area').addClass("not-show");
             check_dung_chat = false;
         }
-       
+
 
         thuc_hien_lai();
-       
+
         $('.nut-chat-gui').click(function () {
             var dulieu = $('.input-field').val();
             alert('Sai đâu đó')
@@ -1322,7 +1424,7 @@
             var data_gui_di = {
                 action: 'CHAT_ADD_DU_LIEU_KHACH',
                 machat: KH_ID,
-                khachhang : dulieu
+                khachhang: dulieu
             }
             if (!admin_login) {
                 $.post(api, data_gui_di, function (data) {
@@ -1410,9 +1512,9 @@
             }
             $('.chat-box').html(noidung_out);
         });
-    } 
+    }
     function thuc_hien_lai() {
-        if (!check_dung_chat) {        
+        if (!check_dung_chat) {
             return;
         }
         else {
@@ -1420,13 +1522,13 @@
                 du_lieu_doan_chat();
             } else {
                 du_lieu_doan_chat_admin();
-            }     
+            }
             const chatBox = document.querySelector('.chat-box');
             chatBox.scrollTop = chatBox.scrollHeight;
             setTimeout(thuc_hien_lai, 500);
         }
-       
-       
+
+
     }
 
 
@@ -1450,11 +1552,9 @@
         }
         return null;
     }
-
     function getLocal(name) {
         return window.localStorage.getItem(name);
     }
-
     function get_store(key) {
         var value = getCookie(key);
         if (value == null || value == '' || value == undefined) {

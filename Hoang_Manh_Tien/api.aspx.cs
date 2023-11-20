@@ -86,6 +86,13 @@ namespace Hoang_Manh_Tien
                 case "CH_CHI_TIET_HOA_DON":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
                     break;
+                case "CH_CHI_TIET_HOA_DON_HOAN_THANH":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    break;
+                case "CH_DA_NHAN_DUOC_HANG":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    break;
+
 
                 case "CH_ADD_HOA_DON":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
@@ -158,17 +165,19 @@ namespace Hoang_Manh_Tien
                     xuly_nguoidung(action);
                     break;
                 case "CH_LIST_BANH":
-                case "CH_LIST_HOA_DON_HOAN_THANH":
-                case "CH_CHI_TIET_HOA_DON":
-                case "CH_ADD_HOA_DON":
-                case "CH_ADD_CT_HOA_DON":
-                case "CH_DOANH_THU":
-                case "CH_XAC_NHAN_HOA_DON":
-                case "CH_UPDATE_XAC_NHAN_DON_HANG":
-                case "CH_TIM_KIEM_BANH":
                 case "CH_LIST_NGUYEN_LIEU":
                 case "CH_SUA_GIA_NGUYEN_LIEU":
+                case "CH_TIM_KIEM_BANH":
+                case "CH_ADD_HOA_DON":
+                case "CH_ADD_CT_HOA_DON":
                 case "CH_DON_HANG_DANG_GIAO":
+                case "CH_CHI_TIET_HOA_DON_HOAN_THANH":
+                case "CH_CHI_TIET_HOA_DON":
+                case "CH_XAC_NHAN_HOA_DON":
+                case "CH_UPDATE_XAC_NHAN_DON_HANG":
+                case "CH_LIST_HOA_DON_HOAN_THANH":
+                case "CH_DOANH_THU":
+                case "CH_DA_NHAN_DUOC_HANG":
                     xuly_cuahang(action);
                     break;
                 case "CHAT_LIST":
