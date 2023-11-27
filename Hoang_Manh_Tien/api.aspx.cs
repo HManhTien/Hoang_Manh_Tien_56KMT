@@ -79,7 +79,7 @@ namespace Hoang_Manh_Tien
                     cm.Parameters.Add("@MNV", SqlDbType.NVarChar, 50).Value = Request["manv"];
                     cm.Parameters.Add("@GIABAN", SqlDbType.Int).Value = Request["gianv"];
                     break;
-                  
+
 
                 case "CH_LIST_HOA_DON_HOAN_THANH":
                     break;
@@ -94,14 +94,19 @@ namespace Hoang_Manh_Tien
                     break;
 
 
+                case "CH_ADD_KHACH_HANG":                  
+                    cm.Parameters.Add("@MAKHACHHANG", SqlDbType.NVarChar, 50).Value = Request["MaKH"];
+                    cm.Parameters.Add("@TENNGUOINHAN", SqlDbType.NVarChar, 50).Value = Request["ten"];
+                    cm.Parameters.Add("@DIACHINHAN", SqlDbType.NVarChar, 50).Value = Request["diachi"];
+                    cm.Parameters.Add("@SDT_NHAN", SqlDbType.NVarChar, 50).Value = Request["sdt"];
+
+
+                    break;
                 case "CH_ADD_HOA_DON":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
-                    cm.Parameters.Add("@TENNGUOINHAN", SqlDbType.NVarChar, 50).Value = Request["Tennguoinhan"];
-                    cm.Parameters.Add("@DIACHINHAN", SqlDbType.NVarChar, 50).Value = Request["diachinguoinhan"];
                     cm.Parameters.Add("@MAKHACHHANG", SqlDbType.NVarChar, 50).Value = Request["MaKH"];
                     cm.Parameters.Add("@TRANGTHAI", SqlDbType.NVarChar, 50).Value = Request["Trangthai"];
                     cm.Parameters.Add("@TONGTIEN", SqlDbType.Int).Value = Request["tongtien"];
-                    cm.Parameters.Add("@SDT_NHAN", SqlDbType.Int).Value = Request["sdt"];
                     break;
                 case "CH_ADD_CT_HOA_DON":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
@@ -110,10 +115,11 @@ namespace Hoang_Manh_Tien
                     cm.Parameters.Add("@GIABAN", SqlDbType.Int).Value = Request["giaban"];
                     break;
                 case "CH_DOANH_THU":
+                    cm.Parameters.Add("@THANG", SqlDbType.NVarChar, 50).Value = Request["thang"];
                     break;
                 case "CH_XAC_NHAN_HOA_DON":
                     break;
-                 case "CH_DON_HANG_DANG_GIAO":
+                case "CH_DON_HANG_DANG_GIAO":
                     break;
                 case "CH_UPDATE_XAC_NHAN_DON_HANG":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
@@ -123,7 +129,16 @@ namespace Hoang_Manh_Tien
                 case "CH_TIM_KIEM_BANH":
                     cm.Parameters.Add("@TENBANH", SqlDbType.NVarChar, 50).Value = Request["tenbanh"];
                     break;
-
+                case "CH_THEM_NGUYEN_LIEU":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    cm.Parameters.Add("@TENNGUYENLIEU", SqlDbType.NVarChar, 50).Value = Request["tennguyenlieu"];
+                    cm.Parameters.Add("@SOLUONG", SqlDbType.NVarChar, 50).Value = Request["soluong"];
+                    cm.Parameters.Add("@DVT", SqlDbType.NVarChar, 50).Value = Request["dvt"];
+                    cm.Parameters.Add("@DONGIA", SqlDbType.NVarChar, 50).Value = Request["gia"];
+                    break;
+                case "CH_HUY_DON":
+                    cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
+                    break;
             }
             string json = (string)db.Scalar(cm); //thuc thi SqlCommand cm này để thu về json
             Response.Write(json); //trả json về trình duyệt
@@ -178,6 +193,9 @@ namespace Hoang_Manh_Tien
                 case "CH_LIST_HOA_DON_HOAN_THANH":
                 case "CH_DOANH_THU":
                 case "CH_DA_NHAN_DUOC_HANG":
+                case "CH_THEM_NGUYEN_LIEU":
+                case "CH_HUY_DON":
+                case "CH_ADD_KHACH_HANG":
                     xuly_cuahang(action);
                     break;
                 case "CHAT_LIST":

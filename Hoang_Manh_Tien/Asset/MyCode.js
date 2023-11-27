@@ -652,8 +652,9 @@
                 break;
             }
         }
+        const randomNumber = Math.floor(Math.random() * 100000000);
 
-        var mahoadon = Math.random();
+        var mahoadon = banh.MABANH + randomNumber
         var content =
             ` <pre>
                     CHÀO MỪNG QUÝ KHÁCH MUA HÀNG 
@@ -685,15 +686,10 @@
                             var data_bang_hoa_don = {
                                 action: 'CH_ADD_HOA_DON',
                                 mahoadon: mahoadon,
-                                MaKH: KH_ID,
-                                MaKH: KH_ID,
-                                Tennguoinhan: $('#tennguoinhan').val(),
-                                diachinguoinhan: $('#diachinhan').val(),
+                                MaKH: KH_ID,                                                           
                                 Trangthai: 'Chờ Xác Nhận',
                                 tongtien: $('#soluong').val() * banh.GIA,
-                                sdt: $('#sdtnhan').val(),
                             }
-
 
                             var data_bang_chi_tiet = {
                                 action: 'CH_ADD_CT_HOA_DON',
@@ -703,8 +699,19 @@
                                 giaban: $('#giatien').val(),
 
                             }
+                            var data_khach_hang = {
+                                action: 'CH_ADD_KHACH_HANG',
+                                MaKH: KH_ID, 
+                                ten: $('#tennguoinhan').val(),
+                                diachi: $('#diachinhan').val(),
+                                sdt: $('#sdtnhan').val(),
+                            }
+                            $.post(api, data_khach_hang, function (data) { })
                             $.post(api, data_bang_hoa_don, function (data) { })
                             $.post(api, data_bang_chi_tiet, function (data) { })
+
+                           
+
 
 
                         } else {
@@ -763,7 +770,7 @@
     $('.btn-dondathang').click(function () {
         if (checkdangnhap()) return;
         add_class_not_show();
-        $('.du-lieu-lam-viec2').removeClass("not-show"); 
+        $('.du-lieu-lam-viec2').removeClass("not-show");
         list_hoa_don_dat_hang();
     });
 
@@ -845,8 +852,8 @@
                         if (action == 'CH_HUY_DON') {
                             HUY_DON_HANG(mahoadon, action, json)
                         } else if (action == 'CH_DA_NHAN_DUOC_HANG') {
-                           
-                           DA_NHAN_HANG(mahoadon, action ,json)
+
+                            DA_NHAN_HANG(mahoadon, action, json)
                         } else {
                             alert('Lỗi đâu rồi ấy')
                         }
@@ -859,7 +866,7 @@
         $.post(api,
             {
                 action: 'CH_CHI_TIET_HOA_DON',
-                mahoadon :mahoadon
+                mahoadon: mahoadon
             }, function (data) {
                 var Hoadon;
                 var json = JSON.parse(data)
@@ -877,16 +884,16 @@
                      Ngày Đặt Hàng: ${Hoadon.NGAY}
                     </pre>`
 
-                            var stt = 0;
-                            for (var item of json.data) {
-                                content += `<pre>
+                    var stt = 0;
+                    for (var item of json.data) {
+                        content += `<pre>
                   ${++stt}.Mặt hàng số ${stt} 
                             - Tên Bánh : ${item.TENBANH}
                             - Số lượng : ${item.SOLUONG}
                             - Giá      : ${item.GIABANH} 000 VNĐ
                             </pre>`;
-                            }
-                            content += `<pre>
+                    }
+                    content += `<pre>
                          - Tên người nhận  : ${item.TEN_NHAN}
                          - Địa chỉ nhận    : ${item.DIACHI}
                          - Số Điện Thoại   : ${item.SDT}
@@ -906,7 +913,7 @@
                         },
                     });
                 } else {
-                    alet('không có dữ liệu')
+                    alert('không có dữ liệu')
                 }
             })
     }
@@ -964,11 +971,11 @@
                         },
                     });
                 } else {
-                    alet('không có dữ liệu')
+                    alert('không có dữ liệu')
                 }
             })
     };
-    function HUY_DON_HANG(mahoadon, action ,json) {
+    function HUY_DON_HANG(mahoadon, action, json) {
         var hoadon;
         for (var item of json.data) {
             if (item.MAHD == mahoadon) {
@@ -986,7 +993,7 @@
                             action: action,
                             mahoadon: mahoadon
                         }
-                        $.post(api, data_gui_di, function (data) {                          
+                        $.post(api, data_gui_di, function (data) {
                             var json = JSON.parse(data); //json string text => obj
                             if (json.ok) { //dùng obj
                                 dialog_huydonhang.close();
@@ -1038,7 +1045,7 @@
             }
         })
     }
- 
+
 
 
 
@@ -1102,36 +1109,61 @@
 
                 $('.nut-thay-doi').click(function () {
                     var mahoadon = $(this).data('cid');
-                   edit_chi_tiet_don_hang_dg(mahoadon);
+                    edit_chi_tiet_don_hang_dg(mahoadon);
                 });
             });
     }
-  
+
 
     $('.btn-doanhthu').click(function () {
-        alert('ko dc bấm');
         if (checkdangnhap()) return;
         add_class_not_show();
         $('.du-lieu-lam-viec2').removeClass("not-show");
-        $('.du-lieu-lam-viec').removeClass("not-show");
         xem_doanh_thu();
-        list_hoa_don_hoan_thanh();
-
     });
     function xem_doanh_thu() {
-        $.post(api,
-            {
-                action: 'CH_DOANH_THU'
-            },
-            function (data) {
-                var json = JSON.parse(data);
-                if (json.ok) {
-                    for (var doanhthu of json.data) {
-                        var loinhuan = doanhthu.TONGTIEN * 30 / 100
-                        var noidung =
-                            `<pre>
+        var noidung1 = "";
+        var thang;
+        noidung1 = `<pre>
+
+         THÁNG:    <select id="chooseOption" name="chooseOption">         
+                                     <option value="1">THÁNG 1</option>
+                                     <option value="2">THÁNG 2</option>
+                                     <option value="3">THÁNG 3</option>
+                                     <option value="4">THÁNG 4</option>
+                                     <option value="5">THÁNG 5</option>
+                                     <option value="6">THÁNG 6</option>
+                                     <option value="7">THÁNG 7</option>
+                                     <option value="8">THÁNG 8</option>
+                                     <option value="9">THÁNG 9</option>
+                                     <option value="10">THÁNG 10</option>
+                                     <option value="11">THÁNG 11</option>
+                                     <option value="12">THÁNG 12</option>                                
+                                 </select>    <button id="xem-doanh-thu">XEM DOANH THU</button>
+
+                 </pre>  `
+        $('.du-lieu-lam-viec2').html(noidung1);
+        $('#xem-doanh-thu').click(function () {
+            thang = $('#chooseOption').val()
+            $.post(api,
+                {
+                    action: 'CH_DOANH_THU',
+                    thang: $('#chooseOption').val()
+                },
+                function (data) {
+                    var json = JSON.parse(data);
+                    if (json.ok) {
+                        for (var doanhthu of json.data) {
+                            if (doanhthu.SOLUONG == 'NULL') {
+                                alet('KHÔNG CÓ DOANH THU')
+                            } else {
+                                $('.du-lieu-lam-viec').removeClass("not-show");
+                                var loinhuan = doanhthu.TONGTIEN * 30 / 100
+                                var noidung =
+                                    `<pre>
+                                   
                         _________________________________________________________________________________
-                        |                        Thông Báo doanh thu của quán                           |
+                        |                        Thông Báo doanh thu của quán Tháng ${thang}                 
                             -_-                                                               -_-       |
                         |                    1. Khách hàng mua nhiều hàng nhất                          |
                                                 Anh(chị): ${doanhthu.TENKHACHHANG}                           
@@ -1152,13 +1184,15 @@
                         |                                                                               |
                         |_______________________________________________________________________________|
                         </pre>`
+                            }
+                            $('.du-lieu-lam-viec').html(noidung);
+                        }
+                    } else {
+                        alert([json.msg]);
                     }
-                    $('.du-lieu-lam-viec2').html(noidung);
-                } else {
-                    alert([json.msg]);
                 }
-            }
-        )
+            )
+        })
     };
 
 
@@ -1272,7 +1306,7 @@
     $('.nut-search').click(function () {
 
         var data_gui_di = {
-            action: 'CH_tim_kiem_banh',
+            action: 'CH_TIM_KIEM_BANH',
             tenbanh: $('.input-seach').val()
         }
         trang_chu_lv(data_gui_di)
@@ -1302,11 +1336,11 @@
             <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Mã Hóa Đơn</th>
-                  <th>Mã Khách Hàng</th>
-                  <th>Giá </th>
-                  <th>Trạng Thái</th>
-                  <th>Ngày mua</th>
+                 
+                  <th>Tên nguyên liệu</th>
+                  <th>số lượng </th>
+                  <th>DVT</th> 
+                  <th>Giá</th>
                   <th>Sửa</th>
                 </tr>
             </thead> <tbody> `
@@ -1317,7 +1351,7 @@
                             `
             <tr>
                 <td>${++stt}</td>
-                <td>${NV.MANV}</td>
+              
                 <td>${NV.TENNV}</td>
                 <td>${NV.SL}</td>
                 <td>${NV.DVT}</td>
@@ -1338,6 +1372,11 @@
                     var mahoadon = $(this).data('cid');
                     sua_nguyen_lieu(mahoadon, json)
                 });
+
+                $('.them-nguyen-lieu').click(function () {
+                    them_nguyen_lieu()
+                });
+
             }
         );
     }
@@ -1398,6 +1437,55 @@
 
     }
 
+    function them_nguyen_lieu() {
+        var content = "";
+        var slmathang = 1;
+        var mahoadon = Math.random();
+        content += 
+
+            `<pre>         
+     MÃ HÓA ĐƠN     : ${mahoadon}
+     NGÀY NHẬP      : ${getdate()}                          
+     TÊN NGUYÊN LIỆU: <input type="text" class="tennguyenlieu" placeholder="Tên Nguyên Liệu" /> 
+     SỐ LƯỢNG       : <input type="number" class="soluong" placeholder="Số lượng " />
+     DVT            : <input type="text" class="donvitinh" placeholder="Đơn vị tính" />
+     GIÁ            : <input type="number" class="giatien" placeholder="Giá" />
+     
+     
+    
+             </pre>`
+        $.confirm({
+            title: "Danh sách tài khoản",
+            content: content,
+            columnClass: 'medium',
+            buttons: {
+                formSubmit: {
+                    text: 'XÁC NHẬN',
+                    btnClass: 'btn-primary',
+                    keys: ['enter', 'enter'],
+                    action: function () {
+                        var data_gui_di = {
+                            action: 'CH_THEM_NGUYEN_LIEU',
+                            mahoadon: mahoadon,
+                            tennguyenlieu: $('.tennguyenlieu').val(),
+                            soluong: $('.soluong').val(),
+                            dvt: $('.donvitinh').val(),
+                            gia: $('.giatien').val()
+
+                        }
+                        $.post(api, data_gui_di, function (data) {
+                            list_danh_sach_nguyen_lieu();
+                        });
+                    }
+                },
+                cancel: {},
+            },
+
+        });
+
+
+    }
+
 
     $('.nut-message').click(function () {
         if ($('.chat-area').hasClass('not-show')) {
@@ -1415,7 +1503,7 @@
 
         $('.nut-chat-gui').click(function () {
             var dulieu = $('.input-field').val();
-            alert('Sai đâu đó')
+
             var data_gui_di_1 = {
                 action: 'CHAT_ADD_DU_LIEU_ADMIN',
                 machat: '3',
