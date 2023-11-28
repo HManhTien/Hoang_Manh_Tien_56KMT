@@ -19,8 +19,6 @@
     Neu_khachhang_dang_nhap();
     trang_chu_lv(action_bandau);
 
-
-
     function getdate() {
         var currentDate = new Date();
         var day = currentDate.getDate();
@@ -29,6 +27,8 @@
 
         return ('' + day + '/' + month + '/' + year);
     }
+
+     
     function login_ck() {
         var data_gui_di = {
             action: 'US_login_ck',
@@ -124,7 +124,7 @@
         $('.btn-nguyenlieu').addClass("not-show");
         $('.btn-dondathang-admin').addClass("not-show");
         $('.btn-doanhthu').addClass("not-show");
-        $('.btn-phanhoi-admin').addClass("not-show");
+        $('.btn-bieudo').addClass("not-show");
 
         $('.btn-trangchu').removeClass("not-show");
         $('.btn-dondathang').removeClass("not-show");
@@ -140,7 +140,7 @@
         $('.btn-nguyenlieu').removeClass("not-show");
         $('.btn-dondathang-admin').removeClass("not-show");
         $('.btn-doanhthu').removeClass("not-show");
-        $('.btn-phanhoi-admin').removeClass("not-show");
+        $('.btn-bieudo').removeClass("not-show");
         add_class_not_show();
     }
 
@@ -1199,17 +1199,18 @@
                     $('.du-lieu-lam-viec').html(noidung);
 
                     $('.in-doanh-thu').click(function () {
-                        XUAT_DOANH_THU_PDF()
+                        var dulieuvao = '.du-lieu-lam-viec'
+                        XUAT_DOANH_THU_PDF(dulieuvao)
                     });
                 }
             )
         })
     };
 
-    function XUAT_DOANH_THU_PDF() {
+    function XUAT_DOANH_THU_PDF(noidung) {
         (function () {
             var
-                form = $('.du-lieu-lam-viec'),
+                form = $(noidung),
                 cache_width = form.width(),
                 a4 = [595.28, 841.89]; // for a4 size paper width and height          
                 $('body').scrollTop(0);
@@ -1235,7 +1236,7 @@
                 return html2canvas(form, {
                     imageTimeout: 2000,
                     removeContainer: true,
-                    dpi: window.devicePixelRatio * 800
+                    dpi: 1
                 });
             }
 
@@ -1547,7 +1548,9 @@
 
             `<pre>         
      MÃ HÓA ĐƠN     : ${mahoadon}
-     NGÀY NHẬP      : ${getdate()}                          
+     NGÀY NHẬP      : ${getdate()}   
+     Tên Nhà Cung Cấp:     <input type="text" class="tennguyenlieu" placeholder="Tên nhà cung cấp" />   
+     Địa chỉ :    <input type="text" class="tennguyenlieu" placeholder="Địa chỉ" />  SDT :    <input type="text" class="tennguyenlieu" placeholder="SDT" />   
      TÊN NGUYÊN LIỆU: <input type="text" class="tennguyenlieu" placeholder="Tên Nguyên Liệu" /> 
      SỐ LƯỢNG       : <input type="number" class="soluong" placeholder="Số lượng " />
      DVT            : <input type="text" class="donvitinh" placeholder="Đơn vị tính" />
@@ -1721,6 +1724,40 @@
 
     }
 
+    $('.btn-bieudo').click(function () {
+        add_class_not_show();
+        $('.du-lieu-lam-viec').removeClass('not-show');
+        alert('HIỆN BIỂU ĐỒ BÁNH ');
+        google.charts.load('current', { 'packages': ['corechart'] });
+
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.post(api, {
+                action: 'CH_BIEU_DO_BANH'
+            }, function (data) {
+                var json = JSON.parse(data);
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                for (var banh of json.data) {
+                    data.addRows([
+                        [banh.TENBANH, banh.SOLUONG],                     
+                    ]);
+                }
+
+                // Set chart options
+                var options = {
+                    'title': 'BIỂU ĐỒ MÔ TẢ SỐ LƯỢNG BÁNH ĐƯỢC BÁN ',
+                    'width': 1050,
+                    'height': 1000
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('okla'));
+                chart.draw(data, options);
+            })     
+        }
+    });
 
     ////// PHẦN NÀY COOKIE NHÉ //////////////
     function setCookie(name, value, days) {

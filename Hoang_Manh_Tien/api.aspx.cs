@@ -92,7 +92,8 @@ namespace Hoang_Manh_Tien
                 case "CH_DA_NHAN_DUOC_HANG":
                     cm.Parameters.Add("@MAHOADON", SqlDbType.NVarChar, 50).Value = Request["mahoadon"];
                     break;
-
+                case "CH_BIEU_DO_BANH":
+                    break;
 
                 case "CH_ADD_KHACH_HANG":                  
                     cm.Parameters.Add("@MAKHACHHANG", SqlDbType.NVarChar, 50).Value = Request["MaKH"];
@@ -196,6 +197,7 @@ namespace Hoang_Manh_Tien
                 case "CH_THEM_NGUYEN_LIEU":
                 case "CH_HUY_DON":
                 case "CH_ADD_KHACH_HANG":
+                case "CH_BIEU_DO_BANH":
                     xuly_cuahang(action);
                     break;
                 case "CHAT_LIST":
